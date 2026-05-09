@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#000000">
+    <title>
+      {{ page_title }}
+      {%- if current_tags -%}
+        &ndash; tagged "{{ current_tags | join: ', ' }}"
+      {%- endif -%}
+      {%- if current_page != 1 -%}
+        &ndash; Page {{ current_page }}
+      {%- endif -%}
+      {%- unless page_title contains shop.name -%}
+        &ndash; {{ shop.name }}
+      {%- endunless -%}
+    </title>
+    {{ content_for_header }}
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+  </head>
+
+  <body>
+    <header class="site-header">
+      <a href="{{ routes.root_url }}" class="site-title">plain and premium</a>
+    </header>
+
+    <main id="MainContent" role="main" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+  </body>
+</html>

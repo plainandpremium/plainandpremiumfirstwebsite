@@ -1,0 +1,235 @@
+:root {
+  --color-bg: #ffffff;
+  --color-text: #111111;
+  --color-accent: #000000;
+  --section-gap: 5rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.page-width {
+  width: min(1200px, calc(100% - 3rem));
+  margin: 0 auto;
+}
+
+.site-header {
+  background: #fff;
+  border-bottom: 1px solid #e8e8e8;
+  padding: 1rem 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.site-title {
+  font-size: 1rem;
+  text-transform: lowercase;
+  letter-spacing: 0.16em;
+  font-weight: 600;
+}
+
+.hero-media {
+  position: relative;
+  min-height: var(--hero-height);
+  color: #fff;
+  background: #000;
+  overflow: hidden;
+}
+
+.hero-media__background,
+.hero-media__background video,
+.hero-media__background img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-media__background video,
+.hero-media__background img {
+  object-fit: cover;
+}
+
+.hero-media__background::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.hero-media__content {
+  position: relative;
+  z-index: 1;
+  min-height: var(--hero-height);
+  display: grid;
+  align-content: end;
+  gap: 0.75rem;
+  padding-bottom: 4rem;
+}
+
+.hero-media__content h1 {
+  margin: 0;
+  font-size: clamp(2rem, 7vw, 5rem);
+  text-transform: lowercase;
+  letter-spacing: 0.06em;
+}
+
+.hero-media__content p {
+  margin: 0;
+  max-width: 34rem;
+  font-size: 1.1rem;
+}
+
+.button {
+  display: inline-block;
+  width: fit-content;
+  padding: 0.8rem 1.3rem;
+  border: 1px solid #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.78rem;
+}
+
+.featured-products {
+  margin: var(--section-gap) auto;
+}
+
+.section-header h2,
+.brand-story h2 {
+  margin: 0 0 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.92rem;
+}
+
+.featured-products__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.product-card__media-link {
+  display: block;
+  background: #f6f6f6;
+}
+
+.product-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.product-card__details {
+  padding-top: 0.75rem;
+}
+
+.product-card__details h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.product-card__details p {
+  margin: 0.45rem 0 0;
+  font-size: 0.92rem;
+}
+
+.product-card__empty {
+  border: 1px dashed #ccc;
+  padding: 2rem 1rem;
+  text-align: center;
+  color: #777;
+}
+
+.brand-story {
+  padding: 0 0 var(--section-gap);
+}
+
+.brand-story__inner p {
+  margin: 0;
+  max-width: 65ch;
+  line-height: 1.8;
+}
+
+.site-footer {
+  border-top: 1px solid #e8e8e8;
+  padding: 2rem 0;
+}
+
+.site-footer__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.site-footer p,
+.site-footer small {
+  margin: 0;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 749px) {
+  :root {
+    --section-gap: 3.3rem;
+    /* Keeps hero ~50–58% viewport; desktop slider still applies above this breakpoint */
+    --hero-mobile-vh: clamp(260px, 56vh, 68vh);
+  }
+
+  /* Desktop hero_height (e.g. 80vh) feels full-screen on phones; cap height here */
+  .hero-media,
+  .hero-media__content {
+    min-height: var(--hero-mobile-vh);
+  }
+
+  .hero-media__content {
+    padding-bottom: 2rem;
+    gap: 0.5rem;
+    align-content: end;
+  }
+
+  .hero-media__content h1 {
+    font-size: clamp(1.65rem, 10vw, 3rem);
+  }
+
+  .hero-media__content p {
+    font-size: 1rem;
+  }
+
+  .page-width {
+    width: min(1200px, calc(100% - 1.6rem));
+  }
+
+  .featured-products {
+    margin-top: 2.5rem;
+  }
+
+  .featured-products__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .site-footer__inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

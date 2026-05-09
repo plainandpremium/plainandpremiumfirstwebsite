@@ -1,0 +1,91 @@
+<section class="hero-media" style="--hero-height: {{ section.settings.hero_height }}vh;">
+  <div class="hero-media__background">
+    {% if section.settings.video != blank %}
+      {{
+        section.settings.video
+        | video_tag:
+          autoplay: true,
+          loop: true,
+          muted: true,
+          controls: false,
+          image_size: '2000x'
+      }}
+    {% elsif section.settings.image != blank %}
+      <img
+        src="{{ section.settings.image | image_url: width: 2200 }}"
+        alt="{{ section.settings.image.alt | escape }}"
+        loading="eager"
+        width="{{ section.settings.image.width }}"
+        height="{{ section.settings.image.height }}"
+      >
+    {% else %}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'hero-media__placeholder' }}
+    {% endif %}
+  </div>
+
+  <div class="hero-media__content page-width">
+    <h1>{{ section.settings.title }}</h1>
+    {% if section.settings.subtitle != blank %}
+      <p>{{ section.settings.subtitle }}</p>
+    {% endif %}
+    {% if section.settings.cta_label != blank and section.settings.cta_link != blank %}
+      <a class="button button--light" href="{{ section.settings.cta_link }}">{{ section.settings.cta_label }}</a>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero media",
+  "settings": [
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Hero video"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Fallback hero image"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Plain and Premium"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "Essentials in black and white."
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Button label",
+      "default": "Shop collection"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button link"
+    },
+    {
+      "type": "range",
+      "id": "hero_height",
+      "min": 60,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "label": "Hero height",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero media"
+    }
+  ]
+}
+{% endschema %}

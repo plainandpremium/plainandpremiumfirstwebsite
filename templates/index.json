@@ -1,0 +1,57 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero-media",
+      "settings": {
+        "title": "Plain and Premium",
+        "subtitle": "Essentials in black and white.",
+        "cta_label": "Shop collection",
+        "cta_link": "/collections/all",
+        "hero_height": 80
+      }
+    },
+    "featured_products": {
+      "type": "featured-two-products",
+      "settings": {
+        "heading": "Featured Pieces"
+      },
+      "blocks": {
+        "product_1": {
+          "type": "product",
+          "settings": {
+            "product": ""
+          }
+        },
+        "product_2": {
+          "type": "product",
+          "settings": {
+            "product": ""
+          }
+        }
+      },
+      "block_order": [
+        "product_1",
+        "product_2"
+      ]
+    },
+    "brand_story": {
+      "type": "brand-story",
+      "settings": {
+        "heading": "Our Idea",
+        "description": "plain and premium creates timeless clothing built around simplicity, fit, and comfort. We focus on versatile pieces that work every day and stay relevant season after season."
+      }
+    },
+    "footer": {
+      "type": "main-footer",
+      "settings": {
+        "text": "plain and premium"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "featured_products",
+    "brand_story",
+    "footer"
+  ]
+}

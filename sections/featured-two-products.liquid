@@ -1,0 +1,75 @@
+<section class="featured-products page-width">
+  <div class="section-header">
+    <h2>{{ section.settings.heading }}</h2>
+  </div>
+  <div class="featured-products__grid">
+    {% for block in section.blocks %}
+      {% assign featured_product = block.settings.product %}
+      <article class="product-card" {{ block.shopify_attributes }}>
+        {% if featured_product != blank %}
+          <a href="{{ featured_product.url }}" class="product-card__media-link">
+            {% if featured_product.featured_image != blank %}
+              <img
+                src="{{ featured_product.featured_image | image_url: width: 900 }}"
+                alt="{{ featured_product.featured_image.alt | escape }}"
+                loading="lazy"
+                width="{{ featured_product.featured_image.width }}"
+                height="{{ featured_product.featured_image.height }}"
+              >
+            {% else %}
+              {{ 'product-1' | placeholder_svg_tag: 'product-card__placeholder' }}
+            {% endif %}
+          </a>
+          <div class="product-card__details">
+            <h3><a href="{{ featured_product.url }}">{{ featured_product.title }}</a></h3>
+            <p>{{ featured_product.price | money }}</p>
+          </div>
+        {% else %}
+          <div class="product-card__empty">Select a product in Theme Editor</div>
+        {% endif %}
+      </article>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured two products",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Featured Pieces"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Select product"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 2,
+  "presets": [
+    {
+      "name": "Featured two products",
+      "blocks": [
+        {
+          "type": "product"
+        },
+        {
+          "type": "product"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
