@@ -23,6 +23,12 @@
     {% endif %}
   </div>
 
+  {% if section.settings.top_text != blank %}
+    <div class="hero-media__top page-width">
+      <p>{{ section.settings.top_text }}</p>
+    </div>
+  {% endif %}
+
   <div class="hero-media__content page-width">
     <h1>{{ section.settings.title }}</h1>
     {% if section.settings.subtitle != blank %}
@@ -47,6 +53,12 @@
       "type": "image_picker",
       "id": "image",
       "label": "Fallback hero image"
+    },
+    {
+      "type": "text",
+      "id": "top_text",
+      "label": "Top text",
+      "default": "Starting with the most premium black and white shirts."
     },
     {
       "type": "text",

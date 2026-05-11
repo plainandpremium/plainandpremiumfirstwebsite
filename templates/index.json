@@ -1,8 +1,19 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
       "type": "hero-media",
       "settings": {
+        "video": "shopify://files/videos/magnific_video-upscale_2955738357.mp4",
+        "top_text": "Starting with the most premium black and white shirts.",
         "title": "Plain and Premium",
         "subtitle": "Essentials in black and white.",
         "cta_label": "Shop collection",
@@ -12,27 +23,27 @@
     },
     "featured_products": {
       "type": "featured-two-products",
-      "settings": {
-        "heading": "Featured Pieces"
-      },
       "blocks": {
         "product_1": {
           "type": "product",
           "settings": {
-            "product": ""
+            "product": "plain-black-t-shirt"
           }
         },
         "product_2": {
           "type": "product",
           "settings": {
-            "product": ""
+            "product": "plain-white-t-shirt"
           }
         }
       },
       "block_order": [
         "product_1",
         "product_2"
-      ]
+      ],
+      "settings": {
+        "heading": "Featured Pieces"
+      }
     },
     "brand_story": {
       "type": "brand-story",
