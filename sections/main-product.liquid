@@ -1,0 +1,70 @@
+<section class="product-page page-width">
+  <div class="product-page__grid">
+    <div class="product-page__media">
+      {% if product.featured_image != blank %}
+        <img
+          src="{{ product.featured_image | image_url: width: 1400 }}"
+          alt="{{ product.featured_image.alt | escape }}"
+          width="{{ product.featured_image.width }}"
+          height="{{ product.featured_image.height }}"
+          loading="eager"
+        >
+      {% else %}
+        {{ 'product-1' | placeholder_svg_tag: 'product-page__placeholder' }}
+      {% endif %}
+    </div>
+
+    <div class="product-page__details">
+      <p class="product-page__eyebrow">{{ section.settings.eyebrow }}</p>
+      <h1>{{ product.title }}</h1>
+      <p class="product-page__price">{{ product.selected_or_first_available_variant.price | money }}</p>
+
+      {% if section.settings.show_description and product.description != blank %}
+        <div class="product-page__description rte">
+          {{ product.description }}
+        </div>
+      {% endif %}
+
+      {% form 'product', product, class: 'product-form' %}
+        {% unless product.has_only_default_variant %}
+          <div class="product-form__field">
+            <label for="variant-select-{{ section.id }}">Size</label>
+            <select id="variant-select-{{ section.id }}" name="id">
+              {% for variant in product.variants %}
+                <option value="{{ variant.id }}" {% if variant == product.selected_or_first_available_variant %}selected{% endif %}>
+                  {{ variant.title }} - {{ variant.price | money }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+        {% else %}
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+        {% endunless %}
+
+        <button type="submit" class="button product-form__submit" {% unless product.available %}disabled{% endunless %}>
+          {% if product.available %}Add to cart{% else %}Sold out{% endif %}
+        </button>
+      {% endform %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Main product",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small heading",
+      "default": "Plain and Premium"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show product description",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

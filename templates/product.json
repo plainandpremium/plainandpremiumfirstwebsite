@@ -1,0 +1,21 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "eyebrow": "Plain and Premium",
+        "show_description": true
+      }
+    },
+    "footer": {
+      "type": "main-footer",
+      "settings": {
+        "text": "plain and premium"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "footer"
+  ]
+}

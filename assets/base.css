@@ -126,6 +126,83 @@ a {
   margin: var(--section-gap) auto;
 }
 
+.product-page {
+  margin: var(--section-gap) auto;
+}
+
+.product-page__grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+.product-page__media img {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: #f5f5f5;
+}
+
+.product-page__details {
+  position: sticky;
+  top: 5.5rem;
+}
+
+.product-page__eyebrow {
+  margin: 0 0 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.75rem;
+}
+
+.product-page__details h1 {
+  margin: 0;
+  font-size: clamp(1.7rem, 3.4vw, 2.8rem);
+  text-transform: lowercase;
+}
+
+.product-page__price {
+  margin: 0.8rem 0 1.5rem;
+  font-size: 1.15rem;
+}
+
+.product-page__description {
+  margin-bottom: 2rem;
+  line-height: 1.7;
+}
+
+.product-form__field {
+  display: grid;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+}
+
+.product-form__field label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+
+.product-form__field select {
+  border: 1px solid #1b1b1b;
+  padding: 0.72rem 0.85rem;
+  font: inherit;
+  background: #fff;
+}
+
+.product-form__submit {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+  cursor: pointer;
+}
+
+.product-form__submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .section-header h2,
 .brand-story h2 {
   margin: 0 0 1.5rem;
@@ -245,6 +322,15 @@ a {
 
   .featured-products {
     margin-top: 2.5rem;
+  }
+
+  .product-page__grid {
+    grid-template-columns: 1fr;
+    gap: 1.3rem;
+  }
+
+  .product-page__details {
+    position: static;
   }
 
   .featured-products__grid {
