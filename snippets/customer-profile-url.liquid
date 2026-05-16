@@ -1,0 +1,6 @@
+{%- comment -%}
+  routes.account_url → …/account/orders
+  Profile after login → …/account/profile
+{%- endcomment -%}
+{% assign account_url_base = routes.account_url | split: '?' | first %}
+{% assign customer_profile_url = account_url_base | replace: '/orders', '/profile' %}

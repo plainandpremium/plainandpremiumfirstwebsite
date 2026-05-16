@@ -1,0 +1,112 @@
+{% render 'customer-profile-url' %}
+
+<section class="customer-account page-width">
+  <header class="customer-account__header">
+    <h1>Addresses</h1>
+    <a href="{{ customer_profile_url }}" class="customer-account__link">Back to profile</a>
+  </header>
+
+  {% paginate customer.addresses by 6 %}
+    {% if customer.addresses.size > 0 %}
+      <ul class="customer-account__address-list">
+        {% for address in customer.addresses %}
+          <li class="customer-account__card">
+            {% if address == customer.default_address %}
+              <p class="customer-account__badge">Default</p>
+            {% endif %}
+            <address>{{ address | format_address }}</address>
+            <div class="customer-account__address-actions">
+              <a href="{{ routes.account_addresses_url }}/{{ address.id }}">Edit</a>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <div class="customer-account__card customer-account__address-form">
+      <h2>{% if customer.addresses.size > 0 %}Add another address{% else %}Add your address{% endif %}</h2>
+      {% form 'customer_address', customer.new_address %}
+        {% if form.errors %}
+          <div class="account-modal__errors" role="alert">{{ form.errors | default_errors }}</div>
+        {% endif %}
+
+        <div class="account-modal__field-row">
+          <div class="account-modal__field">
+            <label for="AddressFirstName">First name</label>
+            <input type="text" id="AddressFirstName" name="address[first_name]" value="{{ form.first_name }}" autocomplete="given-name" required>
+          </div>
+          <div class="account-modal__field">
+            <label for="AddressLastName">Last name</label>
+            <input type="text" id="AddressLastName" name="address[last_name]" value="{{ form.last_name }}" autocomplete="family-name" required>
+          </div>
+        </div>
+
+        <div class="account-modal__field">
+          <label for="AddressPhone">Phone</label>
+          <input type="tel" id="AddressPhone" name="address[phone]" value="{{ form.phone }}" autocomplete="tel">
+        </div>
+
+        <div class="account-modal__field">
+          <label for="Address1">Address</label>
+          <input type="text" id="Address1" name="address[address1]" value="{{ form.address1 }}" autocomplete="address-line1" required>
+        </div>
+
+        <div class="account-modal__field">
+          <label for="Address2">Apartment, suite, etc. (optional)</label>
+          <input type="text" id="Address2" name="address[address2]" value="{{ form.address2 }}" autocomplete="address-line2">
+        </div>
+
+        <div class="account-modal__field-row">
+          <div class="account-modal__field">
+            <label for="AddressCity">City</label>
+            <input type="text" id="AddressCity" name="address[city]" value="{{ form.city }}" autocomplete="address-level2" required>
+          </div>
+          <div class="account-modal__field">
+            <label for="AddressZip">PIN code</label>
+            <input type="text" id="AddressZip" name="address[zip]" value="{{ form.zip }}" autocomplete="postal-code" required>
+          </div>
+        </div>
+
+        <div class="account-modal__field-row">
+          <div class="account-modal__field">
+            <label for="AddressProvince">State</label>
+            <input type="text" id="AddressProvince" name="address[province]" value="{{ form.province }}" required>
+          </div>
+          <div class="account-modal__field">
+            <label for="AddressCountry">Country</label>
+            <input type="text" id="AddressCountry" name="address[country]" value="India" readonly>
+          </div>
+        </div>
+
+        <label class="customer-account__checkbox">
+          <input type="checkbox" name="address[default]" value="1" checked>
+          Set as default address
+        </label>
+
+        <button type="submit" class="button account-modal__submit">Save address</button>
+      {% endform %}
+    </div>
+
+    {% if paginate.pages > 1 %}
+      <div class="customer-account__pagination">
+        {% if paginate.previous %}
+          <a href="{{ paginate.previous.url }}">Previous</a>
+        {% endif %}
+        {% if paginate.next %}
+          <a href="{{ paginate.next.url }}">Next</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  {% endpaginate %}
+
+  <div class="customer-account__home">
+    <a href="{{ routes.root_url }}" class="button customer-account__home-button">Back to home</a>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Addresses",
+  "settings": []
+}
+{% endschema %}

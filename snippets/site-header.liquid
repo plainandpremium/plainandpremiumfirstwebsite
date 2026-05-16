@@ -1,0 +1,37 @@
+{% render 'customer-profile-url' %}
+
+<header class="site-header">
+  <a href="{{ routes.root_url }}" class="site-title">plain and premium</a>
+
+  <nav class="site-header__nav" aria-label="Account and cart">
+    <a href="{{ routes.cart_url }}" class="site-header__cart" aria-label="Cart">
+      <svg class="site-header__cart-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M6 6h15l-1.5 9h-12L6 6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="M6 6L5 3H2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="9" cy="20" r="1.25" fill="currentColor"/>
+        <circle cx="18" cy="20" r="1.25" fill="currentColor"/>
+      </svg>
+      <span class="site-header__cart-count" data-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</span>
+    </a>
+
+    {% if customer %}
+      <a href="{{ customer_profile_url }}" class="site-header__account">
+        {% if customer.first_name != blank %}
+          {{ customer.first_name }}
+        {% elsif customer.email != blank %}
+          {{ customer.email }}
+        {% else %}
+          Account
+        {% endif %}
+      </a>
+      <a href="{{ routes.account_logout_url }}" class="site-header__link">Log out</a>
+    {% else %}
+      <a
+        href="{{ routes.account_login_url }}?return_to={{ customer_profile_url | url_encode }}"
+        class="site-header__link"
+      >
+        Sign in
+      </a>
+    {% endif %}
+  </nav>
+</header>

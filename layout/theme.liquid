@@ -21,12 +21,13 @@
   </head>
 
   <body>
-    <header class="site-header">
-      <a href="{{ routes.root_url }}" class="site-title">plain and premium</a>
-    </header>
+    {% render 'site-header' %}
+    {% render 'cart-toast' %}
 
     <main id="MainContent" role="main" tabindex="-1">
       {{ content_for_layout }}
     </main>
+
+    <script src="{{ 'cart.js' | asset_url }}" defer></script>
   </body>
 </html>

@@ -59,7 +59,7 @@
         </div>
       {% endif %}
 
-      {% form 'product', product, class: 'product-form' %}
+      {% form 'product', product, class: 'product-form js-product-form', id: 'ProductForm' %}
         {% unless product.has_only_default_variant %}
           <div class="product-form__field">
             <label for="variant-select-{{ section.id }}">Size</label>

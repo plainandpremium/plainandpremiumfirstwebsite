@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-register",
+      "settings": {}
+    },
+    "footer": {
+      "type": "main-footer",
+      "settings": {
+        "text": "plain and premium"
+      }
+    }
+  },
+  "order": ["main", "footer"]
+}

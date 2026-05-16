@@ -1,0 +1,99 @@
+<section class="customer-account page-width">
+  <header class="customer-account__header">
+    <h1>Account</h1>
+    <a href="{{ routes.account_logout_url }}" class="customer-account__logout">Log out</a>
+  </header>
+
+  <div class="customer-account__grid">
+    <div class="customer-account__card">
+      <h2>Profile</h2>
+      <dl class="customer-account__details">
+        <div>
+          <dt>Name</dt>
+          <dd>
+            {% if customer.name != blank %}
+              {{ customer.name }}
+            {% else %}
+              {{ customer.email }}
+            {% endif %}
+          </dd>
+        </div>
+        <div>
+          <dt>Email</dt>
+          <dd><a href="mailto:{{ customer.email }}">{{ customer.email }}</a></dd>
+        </div>
+        <div>
+          <dt>Phone</dt>
+          <dd>
+            {% if customer.phone != blank %}
+              <a href="tel:{{ customer.phone }}">{{ customer.phone }}</a>
+            {% else %}
+              <span class="customer-account__empty">Not added yet</span>
+            {% endif %}
+          </dd>
+        </div>
+      </dl>
+      <p class="customer-account__note">Your profile is saved to your account and stays when you sign in again.</p>
+    </div>
+
+    <div class="customer-account__card">
+      <h2>Default address</h2>
+      {% if customer.default_address %}
+        <address class="customer-account__address">
+          {{ customer.default_address | format_address }}
+        </address>
+        <a href="{{ routes.account_addresses_url }}" class="customer-account__link">Update address</a>
+      {% else %}
+        <p class="customer-account__empty">No address saved yet.</p>
+        <a href="{{ routes.account_addresses_url }}" class="button customer-account__inline-button">Add address</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="customer-account__card customer-account__orders">
+    <h2>Orders</h2>
+    {% paginate customer.orders by 10 %}
+      {% if customer.orders.size > 0 %}
+        <ul class="customer-account__order-list">
+          {% for order in customer.orders %}
+            <li class="customer-account__order-item">
+              <div>
+                <a href="{{ order.customer_url }}" class="customer-account__order-link">
+                  Order {{ order.name }}
+                </a>
+                <p class="customer-account__order-meta">
+                  {{ order.created_at | date: '%B %d, %Y' }} &middot; {{ order.financial_status_label }}
+                </p>
+              </div>
+              <p class="customer-account__order-total">{{ order.total_price | money }}</p>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="customer-account__empty">You have not placed any orders yet.</p>
+      {% endif %}
+
+      {% if paginate.pages > 1 %}
+        <div class="customer-account__pagination">
+          {% if paginate.previous %}
+            <a href="{{ paginate.previous.url }}">Previous</a>
+          {% endif %}
+          {% if paginate.next %}
+            <a href="{{ paginate.next.url }}">Next</a>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endpaginate %}
+  </div>
+
+  <div class="customer-account__home">
+    <a href="{{ routes.root_url }}" class="button customer-account__home-button">Back to home</a>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Account",
+  "settings": []
+}
+{% endschema %}

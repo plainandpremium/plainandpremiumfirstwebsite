@@ -1,0 +1,48 @@
+{% render 'customer-profile-url' %}
+
+<section class="customer-account page-width">
+  <header class="customer-account__header">
+    <h1>Order {{ order.name }}</h1>
+    <a href="{{ customer_profile_url }}" class="customer-account__link">Back to profile</a>
+  </header>
+
+  <div class="customer-account__card">
+    <p class="customer-account__order-meta">
+      Placed on {{ order.created_at | date: '%B %d, %Y' }} &middot; {{ order.financial_status_label }}
+    </p>
+    <p><strong>Total:</strong> {{ order.total_price | money }}</p>
+  </div>
+
+  <div class="customer-account__card">
+    <h2>Items</h2>
+    <ul class="customer-account__order-list">
+      {% for line_item in order.line_items %}
+        <li class="customer-account__order-item">
+          <div>
+            <p>{{ line_item.title }}</p>
+            <p class="customer-account__order-meta">Qty {{ line_item.quantity }}</p>
+          </div>
+          <p class="customer-account__order-total">{{ line_item.final_line_price | money }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  {% if order.shipping_address %}
+    <div class="customer-account__card">
+      <h2>Shipping address</h2>
+      <address class="customer-account__address">{{ order.shipping_address | format_address }}</address>
+    </div>
+  {% endif %}
+
+  <div class="customer-account__home">
+    <a href="{{ routes.root_url }}" class="button customer-account__home-button">Back to home</a>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Order",
+  "settings": []
+}
+{% endschema %}

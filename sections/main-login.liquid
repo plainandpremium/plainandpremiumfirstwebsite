@@ -1,0 +1,19 @@
+{% render 'customer-profile-url' %}
+
+<section class="customer-auth page-width">
+  <h1>Sign in</h1>
+  <p class="customer-account__empty">Sign in with your email and the one-time code we send you.</p>
+  <a
+    href="{{ routes.account_login_url }}?return_to={{ customer_profile_url | url_encode }}"
+    class="button account-modal__submit customer-auth__link-button"
+  >
+    Sign in with email
+  </a>
+</section>
+
+{% schema %}
+{
+  "name": "Login",
+  "settings": []
+}
+{% endschema %}

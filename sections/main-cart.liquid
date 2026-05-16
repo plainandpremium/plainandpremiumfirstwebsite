@@ -1,0 +1,100 @@
+<section class="cart-page page-width">
+  <h1 class="cart-page__title">Cart</h1>
+
+  <div class="cart-page__grid">
+    <div class="cart-page__suggestions">
+      <h2 class="cart-page__subtitle">Add more</h2>
+      {% assign cart_product_ids = cart.items | map: 'product_id' %}
+      <ul class="cart-suggestions">
+        {% for product in collections.all.products limit: 8 %}
+          {% unless cart_product_ids contains product.id %}
+            <li class="cart-suggestion">
+              <a href="{{ product.url }}" class="cart-suggestion__image">
+                {% if product.featured_image %}
+                  <img
+                    src="{{ product.featured_image | image_url: width: 200 }}"
+                    alt="{{ product.featured_image.alt | escape }}"
+                    width="80"
+                    height="80"
+                    loading="lazy"
+                  >
+                {% endif %}
+              </a>
+              <div class="cart-suggestion__info">
+                <a href="{{ product.url }}" class="cart-suggestion__title">{{ product.title }}</a>
+                <p class="cart-suggestion__price">{{ product.price | money }}</p>
+                <button
+                  type="button"
+                  class="button cart-suggestion__add js-quick-add"
+                  data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+                  {% unless product.available %}disabled{% endunless %}
+                >
+                  Add to cart
+                </button>
+              </div>
+            </li>
+          {% endunless %}
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="cart-page__items">
+      {% if cart.item_count > 0 %}
+        <ul class="cart-lines">
+          {% for item in cart.items %}
+            <li class="cart-line">
+              <a href="{{ item.url }}" class="cart-line__image">
+                {% if item.image %}
+                  <img
+                    src="{{ item.image | image_url: width: 160 }}"
+                    alt="{{ item.image.alt | escape }}"
+                    width="72"
+                    height="72"
+                    loading="lazy"
+                  >
+                {% endif %}
+              </a>
+              <div class="cart-line__details">
+                <a href="{{ item.url }}" class="cart-line__title">{{ item.product.title }}</a>
+                {% unless item.variant.title == 'Default Title' %}
+                  <p class="cart-line__variant">{{ item.variant.title }}</p>
+                {% endunless %}
+                <p class="cart-line__price">{{ item.final_line_price | money }}</p>
+                <label class="cart-line__qty-label">
+                  Qty
+                  <input
+                    type="number"
+                    class="cart-line__qty js-cart-qty"
+                    name="updates[]"
+                    value="{{ item.quantity }}"
+                    min="0"
+                    data-line-key="{{ item.key }}"
+                    aria-label="Quantity for {{ item.product.title }}"
+                  >
+                </label>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+
+        <div class="cart-page__summary">
+          <p class="cart-page__total">
+            <span>Subtotal</span>
+            <strong>{{ cart.total_price | money }}</strong>
+          </p>
+          <a href="/checkout" class="button cart-page__checkout">Checkout</a>
+        </div>
+      {% else %}
+        <p class="customer-account__empty">Your cart is empty.</p>
+        <a href="{{ routes.root_url }}" class="button cart-page__checkout">Continue shopping</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Cart",
+  "settings": []
+}
+{% endschema %}
