@@ -23,20 +23,20 @@
     {% endif %}
   </div>
 
-  {% if section.settings.top_text != blank %}
-    <div class="hero-media__top page-width">
-      <p>{{ section.settings.top_text }}</p>
-    </div>
-  {% endif %}
+  <div class="hero-media__overlay page-width">
+    {% if section.settings.top_text != blank %}
+      <p class="hero-media__top-text">{{ section.settings.top_text }}</p>
+    {% endif %}
 
-  <div class="hero-media__content page-width">
-    <h1>{{ section.settings.title }}</h1>
-    {% if section.settings.subtitle != blank %}
-      <p>{{ section.settings.subtitle }}</p>
-    {% endif %}
-    {% if section.settings.cta_label != blank and section.settings.cta_link != blank %}
-      <a class="button button--light" href="{{ section.settings.cta_link }}">{{ section.settings.cta_label }}</a>
-    {% endif %}
+    <div class="hero-media__content">
+      <h1>{{ section.settings.title }}</h1>
+      {% if section.settings.subtitle != blank %}
+        <p>{{ section.settings.subtitle }}</p>
+      {% endif %}
+      {% if section.settings.cta_label != blank and section.settings.cta_link != blank %}
+        <a class="button button--light" href="{{ section.settings.cta_link }}">{{ section.settings.cta_label }}</a>
+      {% endif %}
+    </div>
   </div>
 </section>
 
@@ -58,7 +58,7 @@
       "type": "text",
       "id": "top_text",
       "label": "Top text",
-      "default": "Starting with the most premium black and white shirts."
+      "default": "We are starting with the most premium black and white t-shirts."
     },
     {
       "type": "text",

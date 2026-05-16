@@ -1,14 +1,48 @@
 <section class="product-page page-width">
   <div class="product-page__grid">
     <div class="product-page__media">
-      {% if product.featured_image != blank %}
-        <img
-          src="{{ product.featured_image | image_url: width: 1400 }}"
-          alt="{{ product.featured_image.alt | escape }}"
-          width="{{ product.featured_image.width }}"
-          height="{{ product.featured_image.height }}"
-          loading="eager"
-        >
+      {% assign initial_media = product.selected_or_first_available_variant.featured_media | default: product.featured_media | default: product.media.first %}
+      {% if initial_media != blank %}
+        <div class="product-page__gallery" data-product-gallery="{{ section.id }}">
+          {% if product.media.size > 1 %}
+            <div class="product-page__thumbs" aria-label="Product image thumbnails">
+              {% for media in product.media %}
+                {% if media.media_type == 'image' %}
+                  <button
+                    type="button"
+                    class="product-page__thumb{% if media.id == initial_media.id %} is-active{% endif %}"
+                    data-media-id="{{ media.id }}"
+                    data-full-src="{{ media | image_url: width: 1400 }}"
+                    data-alt="{{ media.alt | escape }}"
+                    data-width="{{ media.width }}"
+                    data-height="{{ media.height }}"
+                    aria-label="View image {{ forloop.index }}"
+                    {% if media.id == initial_media.id %}aria-current="true"{% endif %}
+                  >
+                    <img
+                      src="{{ media | image_url: width: 180 }}"
+                      alt="{{ media.alt | escape }}"
+                      width="{{ media.width }}"
+                      height="{{ media.height }}"
+                      loading="lazy"
+                    >
+                  </button>
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% endif %}
+
+          <div class="product-page__main-image-wrap">
+            <img
+              id="ProductMainImage-{{ section.id }}"
+              src="{{ initial_media | image_url: width: 1400 }}"
+              alt="{{ initial_media.alt | escape }}"
+              width="{{ initial_media.width }}"
+              height="{{ initial_media.height }}"
+              loading="eager"
+            >
+          </div>
+        </div>
       {% else %}
         {{ 'product-1' | placeholder_svg_tag: 'product-page__placeholder' }}
       {% endif %}
@@ -48,6 +82,40 @@
     </div>
   </div>
 </section>
+
+<script>
+  (function() {
+    var gallery = document.querySelector('[data-product-gallery="{{ section.id }}"]');
+    if (!gallery) return;
+
+    var mainImage = document.getElementById('ProductMainImage-{{ section.id }}');
+    var thumbs = gallery.querySelectorAll('.product-page__thumb');
+
+    thumbs.forEach(function(thumb) {
+      thumb.addEventListener('click', function() {
+        var src = thumb.getAttribute('data-full-src');
+        var alt = thumb.getAttribute('data-alt') || '';
+        var width = thumb.getAttribute('data-width');
+        var height = thumb.getAttribute('data-height');
+
+        if (!src || !mainImage) return;
+
+        mainImage.setAttribute('src', src);
+        mainImage.setAttribute('alt', alt);
+        if (width) mainImage.setAttribute('width', width);
+        if (height) mainImage.setAttribute('height', height);
+
+        thumbs.forEach(function(other) {
+          other.classList.remove('is-active');
+          other.removeAttribute('aria-current');
+        });
+
+        thumb.classList.add('is-active');
+        thumb.setAttribute('aria-current', 'true');
+      });
+    });
+  })();
+</script>
 
 {% schema %}
 {
