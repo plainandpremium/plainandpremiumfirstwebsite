@@ -12,12 +12,12 @@
     "hero": {
       "type": "hero-media",
       "settings": {
-        "video": "shopify://files/videos/magnific_video-upscale_2955738357.mp4",
-        "top_text": "We are starting with the most premium black and white t-shirts.",
-        "title": "Plain and Premium",
-        "subtitle": "Essentials in black and white.",
+        "video": "shopify://files/videos/Upscaled FULL.mp4",
+        "top_text": "",
+        "title": "plain and premium",
+        "subtitle": "premium made affordable",
         "cta_label": "Shop collection",
-        "cta_link": "/collections/all",
+        "cta_link": "#featured-products",
         "hero_height": 80
       }
     },
@@ -51,18 +51,11 @@
         "heading": "Our Idea",
         "description": "plain and premium creates timeless clothing built around simplicity, fit, and comfort. We focus on versatile pieces that work every day and stay relevant season after season."
       }
-    },
-    "footer": {
-      "type": "main-footer",
-      "settings": {
-        "text": "plain and premium"
-      }
     }
   },
   "order": [
     "hero",
     "featured_products",
-    "brand_story",
-    "footer"
+    "brand_story"
   ]
 }

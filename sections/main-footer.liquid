@@ -1,7 +1,60 @@
+{% render 'customer-profile-url' %}
+
 <footer class="site-footer">
-  <div class="page-width site-footer__inner">
-    <p>{{ section.settings.text }}</p>
-    <small>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}</small>
+  <div class="page-width site-footer__grid">
+    <div class="site-footer__brand">
+      <p class="site-footer__logo">{{ section.settings.brand_text }}</p>
+      {% if section.settings.tagline != blank %}
+        <p class="site-footer__tagline">{{ section.settings.tagline }}</p>
+      {% endif %}
+    </div>
+
+    <div class="site-footer__column">
+      <h2 class="site-footer__heading">Shop</h2>
+      <ul class="site-footer__links">
+        <li><a href="{{ routes.root_url }}">Home</a></li>
+        <li><a href="{{ routes.root_url }}#featured-products">Products</a></li>
+        <li><a href="{{ routes.cart_url }}">Cart</a></li>
+      </ul>
+    </div>
+
+    <div class="site-footer__column">
+      <h2 class="site-footer__heading">Account</h2>
+      <ul class="site-footer__links">
+        {% if customer %}
+          <li><a href="{{ customer_profile_url }}">My profile</a></li>
+          <li><a href="{{ routes.account_logout_url }}">Log out</a></li>
+        {% else %}
+          <li>
+            <a href="{{ routes.account_login_url }}?return_to={{ customer_profile_url | url_encode }}">Sign in</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+
+    <div class="site-footer__column">
+      <h2 class="site-footer__heading">Contact</h2>
+      <ul class="site-footer__links">
+        {% if section.settings.contact_email != blank %}
+          <li><a href="mailto:{{ section.settings.contact_email }}">{{ section.settings.contact_email }}</a></li>
+        {% elsif shop.email != blank %}
+          <li><a href="mailto:{{ shop.email }}">{{ shop.email }}</a></li>
+        {% endif %}
+        {% if shop.privacy_policy %}
+          <li><a href="{{ shop.privacy_policy.url }}">Privacy policy</a></li>
+        {% endif %}
+        {% if shop.refund_policy %}
+          <li><a href="{{ shop.refund_policy.url }}">Refund policy</a></li>
+        {% endif %}
+        {% if shop.terms_of_service %}
+          <li><a href="{{ shop.terms_of_service.url }}">Terms of service</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="page-width site-footer__bottom">
+    <small>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</small>
   </div>
 </footer>
 
@@ -11,9 +64,21 @@
   "settings": [
     {
       "type": "text",
-      "id": "text",
-      "label": "Footer text",
-      "default": "plain and premium"
+      "id": "brand_text",
+      "label": "Brand name",
+      "default": "Look classy"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "money ≠ class."
+    },
+    {
+      "type": "text",
+      "id": "contact_email",
+      "label": "Contact email",
+      "info": "Leave blank to use your store email."
     }
   ],
   "presets": [

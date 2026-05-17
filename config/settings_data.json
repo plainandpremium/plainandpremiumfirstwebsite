@@ -1,0 +1,31 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "current": {
+    "content_for_index": [],
+    "blocks": {
+      "3557650678667880288": {
+        "type": "shopify://apps/razorpay-cod-magic-checkout/blocks/magicx-script/c13c688d-5c45-4054-b95f-1edd63faa705",
+        "disabled": false,
+        "settings": {}
+      }
+    },
+    "sections": {
+      "main-footer": {
+        "type": "main-footer",
+        "settings": {
+          "brand_text": "Look classy",
+          "tagline": "money ≠ class.",
+          "contact_email": ""
+        }
+      }
+    }
+  }
+}
