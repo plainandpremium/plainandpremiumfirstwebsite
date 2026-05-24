@@ -1,4 +1,10 @@
-{% render 'customer-profile-url' %}
+{%- assign _abase = routes.account_url | split: '?' | first | split: '#' | first | remove: '/orders' | remove: '/profile' -%}
+{%- assign _atail = _abase | slice: -1, 1 -%}
+{%- if _atail == '/' -%}
+  {%- assign _alen = _abase.size | minus: 1 -%}
+  {%- assign _abase = _abase | slice: 0, _alen -%}
+{%- endif -%}
+{%- assign customer_profile_url = _abase | append: '/profile' -%}
 
 <section class="customer-account page-width">
   <header class="customer-account__header">

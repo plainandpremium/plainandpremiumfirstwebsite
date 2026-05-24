@@ -1,9 +1,25 @@
-{% render 'customer-profile-url' %}
+{%- comment -%}
+  Build profile + orders URLs that always land on the right page.
+  routes.account_url may end with /orders, /profile, or nothing — normalise to a base, then append.
+  Inlined here because {% render %} isolates scope and would hide these variables.
+{%- endcomment -%}
+{%- assign _abase = routes.account_url | split: '?' | first | split: '#' | first | remove: '/orders' | remove: '/profile' -%}
+{%- assign _atail = _abase | slice: -1, 1 -%}
+{%- if _atail == '/' -%}
+  {%- assign _alen = _abase.size | minus: 1 -%}
+  {%- assign _abase = _abase | slice: 0, _alen -%}
+{%- endif -%}
+{%- assign customer_profile_url = _abase | append: '/profile' -%}
+{%- assign customer_orders_url = _abase | append: '/orders' -%}
 
 <header class="site-header">
-  <a href="{{ routes.root_url }}" class="site-title">plain and premium</a>
+  <a href="{{ routes.root_url }}" class="site-title">
+    <span class="site-title__line">plain</span>
+    <span class="site-title__line">and</span>
+    <span class="site-title__line">premium</span>
+  </a>
 
-  <nav class="site-header__nav" aria-label="Account and cart">
+  <nav class="site-header__nav" aria-label="Cart and menu">
     <a href="{{ routes.cart_url }}" class="site-header__cart" aria-label="Cart">
       <svg class="site-header__cart-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path d="M6 6h15l-1.5 9h-12L6 6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
@@ -14,24 +30,100 @@
       <span class="site-header__cart-count" data-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</span>
     </a>
 
-    {% if customer %}
-      <a href="{{ customer_profile_url }}" class="site-header__account">
-        {% if customer.first_name != blank %}
-          {{ customer.first_name }}
-        {% elsif customer.email != blank %}
-          {{ customer.email }}
-        {% else %}
-          Account
-        {% endif %}
-      </a>
-      <a href="{{ routes.account_logout_url }}" class="site-header__link">Log out</a>
-    {% else %}
-      <a
-        href="{{ routes.account_login_url }}?return_to={{ customer_profile_url | url_encode }}"
-        class="site-header__link"
-      >
-        Sign in
-      </a>
-    {% endif %}
+    <button
+      type="button"
+      class="site-header__menu-toggle"
+      aria-label="Open menu"
+      aria-controls="SiteMenu"
+      aria-expanded="false"
+      data-menu-toggle
+    >
+      <svg class="site-header__menu-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <line x1="4" y1="7" x2="20" y2="7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        <line x1="4" y1="12" x2="20" y2="12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        <line x1="4" y1="17" x2="20" y2="17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+    </button>
   </nav>
 </header>
+
+<div class="site-drawer" id="SiteMenu" data-menu-drawer aria-hidden="true">
+  <div class="site-drawer__backdrop" data-menu-close></div>
+  <aside class="site-drawer__panel" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="site-drawer__header">
+      <p class="site-drawer__title">Menu</p>
+      <button type="button" class="site-drawer__close" aria-label="Close menu" data-menu-close>&times;</button>
+    </div>
+
+    <nav class="site-drawer__nav" aria-label="Account and shop">
+      {% if customer %}
+        <p class="site-drawer__greeting">
+          {% if customer.first_name != blank %}
+            Hi, {{ customer.first_name }}
+          {% else %}
+            Hi there
+          {% endif %}
+        </p>
+        <ul class="site-drawer__list">
+          <li><a href="{{ customer_profile_url }}">Profile</a></li>
+          <li><a href="{{ routes.account_addresses_url }}">Addresses</a></li>
+          <li><a href="{{ customer_orders_url }}">Orders</a></li>
+        </ul>
+        <a href="{{ routes.account_logout_url }}" class="site-drawer__logout">Log out</a>
+      {% else %}
+        <ul class="site-drawer__list">
+          <li>
+            {%- comment -%}
+              data-signin-redirect arms the sessionStorage flag (see theme.liquid).
+              return_to points to /?goto=profile so if Shopify honors it, the user lands on
+              the storefront homepage with the query trigger.
+            {%- endcomment -%}
+            {%- assign _signin_return = routes.root_url | append: '?goto=profile' -%}
+            <a
+              href="{{ routes.account_login_url }}?return_to={{ _signin_return | url_encode }}"
+              data-signin-redirect
+            >
+              Sign in
+            </a>
+          </li>
+        </ul>
+      {% endif %}
+    </nav>
+  </aside>
+</div>
+
+<script>
+  (function () {
+    var drawer = document.querySelector('[data-menu-drawer]');
+    var toggles = document.querySelectorAll('[data-menu-toggle]');
+    var closers = document.querySelectorAll('[data-menu-close]');
+    if (!drawer) return;
+
+    function setOpen(isOpen) {
+      drawer.classList.toggle('is-open', isOpen);
+      drawer.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+      document.body.classList.toggle('site-drawer-open', isOpen);
+      toggles.forEach(function (t) {
+        t.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      });
+    }
+
+    toggles.forEach(function (t) {
+      t.addEventListener('click', function () {
+        setOpen(!drawer.classList.contains('is-open'));
+      });
+    });
+
+    closers.forEach(function (c) {
+      c.addEventListener('click', function () {
+        setOpen(false);
+      });
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && drawer.classList.contains('is-open')) {
+        setOpen(false);
+      }
+    });
+  })();
+</script>

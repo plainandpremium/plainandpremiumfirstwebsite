@@ -1,4 +1,10 @@
-{% render 'customer-profile-url' %}
+{%- assign _abase = routes.account_url | split: '?' | first | split: '#' | first | remove: '/orders' | remove: '/profile' -%}
+{%- assign _atail = _abase | slice: -1, 1 -%}
+{%- if _atail == '/' -%}
+  {%- assign _alen = _abase.size | minus: 1 -%}
+  {%- assign _abase = _abase | slice: 0, _alen -%}
+{%- endif -%}
+{%- assign customer_profile_url = _abase | append: '/profile' -%}
 
 <footer class="site-footer">
   <div class="page-width site-footer__grid">
@@ -26,7 +32,11 @@
           <li><a href="{{ routes.account_logout_url }}">Log out</a></li>
         {% else %}
           <li>
-            <a href="{{ routes.account_login_url }}?return_to={{ customer_profile_url | url_encode }}">Sign in</a>
+            {%- assign _signin_return = routes.root_url | append: '?goto=profile' -%}
+            <a
+              href="{{ routes.account_login_url }}?return_to={{ _signin_return | url_encode }}"
+              data-signin-redirect
+            >Sign in</a>
           </li>
         {% endif %}
       </ul>

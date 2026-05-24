@@ -1,6 +1,16 @@
 {%- comment -%}
-  routes.account_url → …/account/orders
-  Profile after login → …/account/profile
+  Builds customer_profile_url and customer_orders_url.
+
+  NOTE: This snippet is only useful when used with {% include %} (shared scope).
+  {% render %} isolates scope and assigned variables will NOT propagate back.
+  In most templates these assigns are now inlined directly. This file is kept
+  as a single source of truth.
 {%- endcomment -%}
-{% assign account_url_base = routes.account_url | split: '?' | first %}
-{% assign customer_profile_url = account_url_base | replace: '/orders', '/profile' %}
+{%- assign _abase = routes.account_url | split: '?' | first | split: '#' | first | remove: '/orders' | remove: '/profile' -%}
+{%- assign _atail = _abase | slice: -1, 1 -%}
+{%- if _atail == '/' -%}
+  {%- assign _alen = _abase.size | minus: 1 -%}
+  {%- assign _abase = _abase | slice: 0, _alen -%}
+{%- endif -%}
+{%- assign customer_profile_url = _abase | append: '/profile' -%}
+{%- assign customer_orders_url = _abase | append: '/orders' -%}

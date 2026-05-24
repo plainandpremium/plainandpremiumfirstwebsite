@@ -60,27 +60,24 @@ a {
   gap: 1rem;
 }
 
-.site-header__link,
-.site-header__account {
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.site-header__button {
+.site-header__menu-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
-  padding: 0;
-  font: inherit;
+  padding: 0.15rem;
   cursor: pointer;
   color: inherit;
+  line-height: 0;
 }
 
-.site-header__account {
-  font-weight: 600;
+.site-header__menu-icon {
+  display: block;
 }
 
-body.account-modal-open {
+body.account-modal-open,
+body.site-drawer-open {
   overflow: hidden;
 }
 
@@ -930,6 +927,126 @@ body.account-modal-open {
   border-color: #111;
 }
 
+.site-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+.site-drawer.is-open {
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.site-drawer__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.site-drawer.is-open .site-drawer__backdrop {
+  opacity: 1;
+}
+
+.site-drawer__panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(90vw, 360px);
+  background: #fff;
+  color: #111;
+  padding: 1.5rem 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  transform: translateX(100%);
+  transition: transform 0.28s ease;
+  box-shadow: -8px 0 24px rgba(0, 0, 0, 0.08);
+}
+
+.site-drawer.is-open .site-drawer__panel {
+  transform: translateX(0);
+}
+
+.site-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #eee;
+}
+
+.site-drawer__title {
+  margin: 0;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-weight: 600;
+}
+
+.site-drawer__close {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 1.8rem;
+  line-height: 1;
+  cursor: pointer;
+  color: #111;
+}
+
+.site-drawer__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.site-drawer__greeting {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.site-drawer__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.site-drawer__list a {
+  display: block;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  color: #111;
+}
+
+.site-drawer__list a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.site-drawer__logout {
+  margin-top: auto;
+  align-self: flex-start;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #666;
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+  width: 100%;
+}
+
+.site-drawer__logout:hover {
+  color: #111;
+}
+
 @media (max-width: 749px) {
   :root {
     --section-gap: 3.3rem;
@@ -1025,5 +1142,123 @@ body.account-modal-open {
 
   .cart-page__items {
     order: -1;
+  }
+
+  /* Mobile header — stacked brand, compact (~75% of previous height) */
+  .site-header {
+    padding: 0.85rem 1.25rem;
+    align-items: center;
+  }
+
+  .site-title {
+    font-size: 0.95rem;
+    letter-spacing: 0.18em;
+    line-height: 1.05;
+  }
+
+  .site-title__line {
+    display: block;
+  }
+
+  .site-header__nav {
+    gap: 1.1rem;
+  }
+
+  .site-header__cart-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .site-header__cart-count {
+    top: -8px;
+    right: -10px;
+    min-width: 1.35rem;
+    height: 1.35rem;
+    padding: 0 0.3rem;
+    font-size: 0.7rem;
+    line-height: 1.35rem;
+  }
+
+  .site-header__menu-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .site-drawer__panel {
+    width: min(86vw, 380px);
+  }
+
+  .site-drawer__list a,
+  .site-drawer__logout {
+    font-size: 1.05rem;
+  }
+
+  /* Mobile footer — bigger, more readable */
+  .site-footer {
+    padding: 3.5rem 0 1.75rem;
+  }
+
+  .site-footer__logo {
+    font-size: 1.35rem;
+    letter-spacing: 0.18em;
+    margin-bottom: 0.8rem;
+  }
+
+  .site-footer__tagline {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    max-width: 28ch;
+  }
+
+  .site-footer__heading {
+    font-size: 0.9rem;
+    letter-spacing: 0.14em;
+    margin-bottom: 1rem;
+  }
+
+  .site-footer__links {
+    gap: 0.7rem;
+  }
+
+  .site-footer__links a {
+    font-size: 1.05rem;
+  }
+
+  .site-footer__bottom small {
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+  }
+
+  /* Mobile content — slightly larger body text where it was cramped */
+  .hero-media__content p {
+    font-size: 1.08rem;
+  }
+
+  .brand-story__inner p {
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+
+  .product-card__details h3 {
+    font-size: 1.1rem;
+  }
+
+  .product-card__details p {
+    font-size: 1rem;
+  }
+
+  .cart-suggestion__title,
+  .cart-line__title {
+    font-size: 1.05rem;
+  }
+
+  .cart-suggestion__price,
+  .cart-line__variant,
+  .cart-line__price {
+    font-size: 0.95rem;
+  }
+
+  .cart-page__total {
+    font-size: 1.1rem;
   }
 }

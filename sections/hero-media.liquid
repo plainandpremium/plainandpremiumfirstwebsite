@@ -1,6 +1,15 @@
 <section class="hero-media" style="--hero-height: {{ section.settings.hero_height }}vh;">
   <div class="hero-media__background">
-    {% if section.settings.video != blank %}
+    {%- assign media_type = section.settings.media_type -%}
+    {% if media_type == 'image' and section.settings.image != blank %}
+      <img
+        src="{{ section.settings.image | image_url: width: 2200 }}"
+        alt="{{ section.settings.image.alt | escape }}"
+        loading="eager"
+        width="{{ section.settings.image.width }}"
+        height="{{ section.settings.image.height }}"
+      >
+    {% elsif media_type == 'video' and section.settings.video != blank %}
       {{
         section.settings.video
         | video_tag:
@@ -18,6 +27,16 @@
         width="{{ section.settings.image.width }}"
         height="{{ section.settings.image.height }}"
       >
+    {% elsif section.settings.video != blank %}
+      {{
+        section.settings.video
+        | video_tag:
+          autoplay: true,
+          loop: true,
+          muted: true,
+          controls: false,
+          image_size: '2000x'
+      }}
     {% else %}
       {{ 'lifestyle-1' | placeholder_svg_tag: 'hero-media__placeholder' }}
     {% endif %}
@@ -45,14 +64,35 @@
   "name": "Hero media",
   "settings": [
     {
-      "type": "video",
-      "id": "video",
-      "label": "Hero video"
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "select",
+      "id": "media_type",
+      "label": "Media type",
+      "options": [
+        { "value": "image", "label": "Image" },
+        { "value": "video", "label": "Video" }
+      ],
+      "default": "video",
+      "info": "Choose what to display in the hero. Upload the matching file below."
     },
     {
       "type": "image_picker",
       "id": "image",
-      "label": "Fallback hero image"
+      "label": "Hero image",
+      "info": "Used when Media type is Image."
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Hero video",
+      "info": "Used when Media type is Video."
+    },
+    {
+      "type": "header",
+      "content": "Text"
     },
     {
       "type": "text",

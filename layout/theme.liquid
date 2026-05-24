@@ -17,6 +17,79 @@
       {%- endunless -%}
     </title>
     {{ content_for_header }}
+
+    {%- comment -%}
+      Post sign-in profile redirect.
+      Goal: when a customer just signed in via our Sign in link, send them to the Profile tab
+      instead of Shopify's default Orders landing on the hosted account UI.
+      Two triggers (either can fire): ?goto=profile in the URL (return_to was honored) OR a
+      sessionStorage timestamp flag set on Sign in click (catches the case where Shopify
+      ignored return_to and the user came back to the storefront).
+    {%- endcomment -%}
+    {%- assign _abase = routes.account_url | split: '?' | first | split: '#' | first | remove: '/orders' | remove: '/profile' -%}
+    {%- assign _atail = _abase | slice: -1, 1 -%}
+    {%- if _atail == '/' -%}
+      {%- assign _alen = _abase.size | minus: 1 -%}
+      {%- assign _abase = _abase | slice: 0, _alen -%}
+    {%- endif -%}
+    {%- assign theme_profile_url = _abase | append: '/profile' -%}
+    <script>
+      window.PnP = window.PnP || {};
+      window.PnP.profileUrl = {{ theme_profile_url | json }};
+      window.PnP.customerLoggedIn = {% if customer %}true{% else %}false{% endif %};
+
+      (function () {
+        var P = window.PnP;
+        if (!P || !P.profileUrl) return;
+
+        var here = window.location.pathname;
+        var profilePath;
+        try {
+          profilePath = new URL(P.profileUrl, window.location.origin).pathname;
+        } catch (e) {
+          profilePath = P.profileUrl;
+        }
+        if (here === profilePath) return;
+
+        var params = new URLSearchParams(window.location.search);
+        var fromQuery = params.get('goto') === 'profile';
+        if (fromQuery) {
+          params.delete('goto');
+          var qs = params.toString();
+          var clean = here + (qs ? '?' + qs : '') + window.location.hash;
+          try { window.history.replaceState({}, '', clean); } catch (e) {}
+        }
+
+        var fromFlag = false;
+        try {
+          var raw = sessionStorage.getItem('pnpSigninPending');
+          if (raw) {
+            var ts = parseInt(raw, 10);
+            if (!isNaN(ts) && (Date.now() - ts) < 5 * 60 * 1000) {
+              fromFlag = true;
+            } else {
+              sessionStorage.removeItem('pnpSigninPending');
+            }
+          }
+        } catch (e) {}
+
+        if ((fromQuery || fromFlag) && P.customerLoggedIn) {
+          try { sessionStorage.removeItem('pnpSigninPending'); } catch (e) {}
+          window.location.replace(P.profileUrl);
+        }
+      })();
+
+      document.addEventListener('click', function (e) {
+        var t = e.target;
+        if (!t || !t.closest) return;
+        var link = t.closest('a[data-signin-redirect]');
+        if (!link) return;
+        try {
+          sessionStorage.setItem('pnpSigninPending', String(Date.now()));
+        } catch (err) {}
+      });
+    </script>
+
     {{ 'base.css' | asset_url | stylesheet_tag }}
   </head>
 
