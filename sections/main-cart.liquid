@@ -61,16 +61,34 @@
                 {% endunless %}
                 <p class="cart-line__price">{{ item.final_line_price | money }}</p>
                 <label class="cart-line__qty-label">
-                  Qty
-                  <input
-                    type="number"
-                    class="cart-line__qty js-cart-qty"
-                    name="updates[]"
-                    value="{{ item.quantity }}"
-                    min="0"
-                    data-line-key="{{ item.key }}"
-                    aria-label="Quantity for {{ item.product.title }}"
-                  >
+                  <span>Qty</span>
+                  <span class="cart-line__qty-wrap">
+                    <button
+                      type="button"
+                      class="cart-line__qty-btn js-cart-qty-btn"
+                      data-qty-action="decrease"
+                      aria-label="Decrease quantity for {{ item.product.title }}"
+                    >
+                      −
+                    </button>
+                    <input
+                      type="number"
+                      class="cart-line__qty js-cart-qty"
+                      name="updates[]"
+                      value="{{ item.quantity }}"
+                      min="0"
+                      data-line-key="{{ item.key }}"
+                      aria-label="Quantity for {{ item.product.title }}"
+                    >
+                    <button
+                      type="button"
+                      class="cart-line__qty-btn js-cart-qty-btn"
+                      data-qty-action="increase"
+                      aria-label="Increase quantity for {{ item.product.title }}"
+                    >
+                      +
+                    </button>
+                  </span>
                 </label>
               </div>
             </li>

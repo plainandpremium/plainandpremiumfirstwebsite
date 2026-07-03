@@ -2,6 +2,7 @@
   var cartCountEl = document.querySelector('[data-cart-count]');
   var toast = document.getElementById('CartToast');
   var toastTimer;
+  var cartUpdateInFlight = false;
 
   function showToast() {
     if (!toast) return;
@@ -52,6 +53,60 @@
       }
       return res.json();
     });
+  }
+
+  function formatMoney(cents, currencyCode) {
+    var amount = (parseInt(cents, 10) || 0) / 100;
+    var code = currencyCode || 'INR';
+    try {
+      return new Intl.NumberFormat(undefined, {
+        style: 'currency',
+        currency: code,
+      }).format(amount);
+    } catch (e) {
+      return amount.toFixed(2);
+    }
+  }
+
+  function setCartQtyDisabled(disabled) {
+    document.querySelectorAll('.js-cart-qty, .js-cart-qty-btn').forEach(function (el) {
+      el.disabled = disabled;
+    });
+  }
+
+  function renderCartFromResponse(cart, changedKey) {
+    if (!cart) return;
+    updateCartCount(cart.item_count);
+
+    var subtotalEl = document.querySelector('.cart-page__total strong');
+    if (subtotalEl) {
+      subtotalEl.textContent = formatMoney(cart.total_price, cart.currency);
+    }
+
+    var lineEl = document.querySelector('.js-cart-qty[data-line-key="' + changedKey + '"]');
+    if (!lineEl) return;
+    var cartLine = lineEl.closest('.cart-line');
+    if (!cartLine) return;
+
+    var changedItem = (cart.items || []).find(function (item) {
+      return item.key === changedKey;
+    });
+
+    if (!changedItem || changedItem.quantity <= 0) {
+      cartLine.remove();
+      if (!cart.items || cart.items.length === 0) {
+        window.location.reload();
+      }
+      return;
+    }
+
+    var qtyInput = cartLine.querySelector('.js-cart-qty');
+    if (qtyInput) qtyInput.value = String(changedItem.quantity);
+
+    var linePriceEl = cartLine.querySelector('.cart-line__price');
+    if (linePriceEl) {
+      linePriceEl.textContent = formatMoney(changedItem.final_line_price, cart.currency);
+    }
   }
 
   document.querySelectorAll('.js-product-form').forEach(function (form) {
@@ -110,9 +165,13 @@
 
   document.querySelectorAll('.js-cart-qty').forEach(function (input) {
     input.addEventListener('change', function () {
+      if (cartUpdateInFlight) return;
       var key = input.getAttribute('data-line-key');
       var qty = parseInt(input.value, 10);
+      if (isNaN(qty) || qty < 0) qty = 0;
       if (!key) return;
+      cartUpdateInFlight = true;
+      setCartQtyDisabled(true);
 
       fetch('/cart/change.js', {
         method: 'POST',
@@ -126,12 +185,31 @@
         .then(function (res) {
           return res.json();
         })
-        .then(function () {
-          window.location.reload();
+        .then(function (cart) {
+          renderCartFromResponse(cart, key);
+          cartUpdateInFlight = false;
+          setCartQtyDisabled(false);
         })
         .catch(function () {
           window.location.reload();
         });
+    });
+  });
+
+  document.querySelectorAll('.js-cart-qty-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var wrap = btn.closest('.cart-line__qty-wrap');
+      if (!wrap) return;
+      var input = wrap.querySelector('.js-cart-qty');
+      if (!input) return;
+
+      var current = parseInt(input.value, 10);
+      if (isNaN(current)) current = 0;
+      var action = btn.getAttribute('data-qty-action');
+      var next = action === 'decrease' ? Math.max(0, current - 1) : current + 1;
+
+      input.value = String(next);
+      input.dispatchEvent(new Event('change', { bubbles: true }));
     });
   });
 
