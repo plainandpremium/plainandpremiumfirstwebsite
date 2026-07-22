@@ -23,6 +23,33 @@
           <div class="product-card__details">
             <h3><a href="{{ featured_product.url }}">{{ featured_product.title }}</a></h3>
             <p>{{ featured_product.price | money }}</p>
+            {% assign size_scale = 'XS,S,M,L,XL,XXL' | split: ',' %}
+            {% assign size_option_index = nil %}
+            {% for option in featured_product.options_with_values %}
+              {% assign option_name_down = option.name | downcase %}
+              {% if option_name_down == 'size' or option_name_down == 'sizes' %}
+                {% assign size_option_index = forloop.index0 %}
+              {% endif %}
+            {% endfor %}
+            {% if size_option_index == nil and featured_product.options.size > 0 and featured_product.has_only_default_variant == false %}
+              {% assign size_option_index = 0 %}
+            {% endif %}
+            {% if size_option_index != nil and featured_product.has_only_default_variant == false %}
+              <p class="product-card__sizes" aria-label="Available sizes">
+                {% for size in size_scale %}
+                  {% assign size_down = size | downcase %}
+                  {% assign size_available = false %}
+                  {% for variant in featured_product.variants %}
+                    {% assign variant_size_down = variant.options[size_option_index] | strip | downcase %}
+                    {% if variant_size_down == size_down and variant.available %}
+                      {% assign size_available = true %}
+                      {% break %}
+                    {% endif %}
+                  {% endfor %}
+                  <span class="product-card__size{% unless size_available %} is-unavailable{% endunless %}">{{ size }}</span>{% unless forloop.last %} · {% endunless %}
+                {% endfor %}
+              </p>
+            {% endif %}
           </div>
         {% else %}
           <div class="product-card__empty">Select a product in Theme Editor</div>

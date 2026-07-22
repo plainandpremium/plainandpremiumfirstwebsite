@@ -23,14 +23,20 @@
               <div class="cart-suggestion__info">
                 <a href="{{ product.url }}" class="cart-suggestion__title">{{ product.title }}</a>
                 <p class="cart-suggestion__price">{{ product.price | money }}</p>
-                <button
-                  type="button"
-                  class="button cart-suggestion__add js-quick-add"
-                  data-variant-id="{{ product.selected_or_first_available_variant.id }}"
-                  {% unless product.available %}disabled{% endunless %}
-                >
-                  Add to cart
-                </button>
+                {% if product.has_only_default_variant %}
+                  <button
+                    type="button"
+                    class="button cart-suggestion__add js-quick-add"
+                    data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+                    {% unless product.available %}disabled{% endunless %}
+                  >
+                    Add to cart
+                  </button>
+                {% else %}
+                  <a href="{{ product.url }}" class="button cart-suggestion__add">
+                    Select size
+                  </a>
+                {% endif %}
               </div>
             </li>
           {% endunless %}
@@ -57,7 +63,7 @@
               <div class="cart-line__details">
                 <a href="{{ item.url }}" class="cart-line__title">{{ item.product.title }}</a>
                 {% unless item.variant.title == 'Default Title' %}
-                  <p class="cart-line__variant">{{ item.variant.title }}</p>
+                  <p class="cart-line__variant">Size: {{ item.variant.title }}</p>
                 {% endunless %}
                 <p class="cart-line__price">{{ item.final_line_price | money }}</p>
                 <label class="cart-line__qty-label">

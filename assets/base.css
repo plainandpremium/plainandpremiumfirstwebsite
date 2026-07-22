@@ -578,7 +578,8 @@ body.site-drawer-open {
   margin-bottom: 1rem;
 }
 
-.product-form__field label {
+.product-form__field label,
+.product-form__size-label {
   font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.09em;
@@ -591,6 +592,73 @@ body.site-drawer-open {
   background: #fff;
 }
 
+.product-form__sizes {
+  margin-bottom: 1.25rem;
+}
+
+.product-form__size-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.product-form__size-selected {
+  font-size: 0.88rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #555;
+}
+
+.product-form__size-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.product-form__size-btn {
+  appearance: none;
+  border: 1px solid #1b1b1b;
+  background: #fff;
+  color: #111;
+  min-height: 2.6rem;
+  padding: 0.45rem 0.2rem;
+  font: inherit;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.product-form__size-btn:hover:not(:disabled) {
+  background: #111;
+  color: #fff;
+}
+
+.product-form__size-btn.is-selected {
+  background: #111;
+  color: #fff;
+}
+
+.product-form__size-btn.is-unavailable,
+.product-form__size-btn:disabled {
+  border-color: #d8d8d8;
+  color: #b0b0b0;
+  background: #f5f5f5;
+  cursor: not-allowed;
+  position: relative;
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.product-form__size-note {
+  margin: 0.65rem 0 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #777;
+}
+
 .product-form__submit {
   background: #111;
   color: #fff;
@@ -601,6 +669,23 @@ body.site-drawer-open {
 .product-form__submit:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.product-card__sizes {
+  margin: 0.4rem 0 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #777;
+}
+
+.product-card__size {
+  color: #111;
+}
+
+.product-card__size.is-unavailable {
+  color: #bbb;
+  text-decoration: line-through;
 }
 
 .section-header h2,
@@ -1133,6 +1218,16 @@ body.site-drawer-open {
 
   .product-page__details {
     position: static;
+  }
+
+  .product-form__size-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .product-form__size-btn {
+    min-height: 2.85rem;
+    font-size: 0.9rem;
   }
 
   .featured-products__grid {

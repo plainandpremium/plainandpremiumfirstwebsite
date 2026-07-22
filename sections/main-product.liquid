@@ -51,7 +51,9 @@
     <div class="product-page__details">
       <p class="product-page__eyebrow">{{ section.settings.eyebrow }}</p>
       <h1>{{ product.title }}</h1>
-      <p class="product-page__price">{{ product.selected_or_first_available_variant.price | money }}</p>
+      <p class="product-page__price" data-product-price>
+        {{ product.selected_or_first_available_variant.price | money }}
+      </p>
 
       {% if section.settings.show_description and product.description != blank %}
         <div class="product-page__description rte">
@@ -60,23 +62,152 @@
       {% endif %}
 
       {% form 'product', product, class: 'product-form js-product-form', id: 'ProductForm' %}
-        {% unless product.has_only_default_variant %}
-          <div class="product-form__field">
-            <label for="variant-select-{{ section.id }}">Size</label>
-            <select id="variant-select-{{ section.id }}" name="id">
-              {% for variant in product.variants %}
-                <option value="{{ variant.id }}" {% if variant == product.selected_or_first_available_variant %}selected{% endif %}>
-                  {{ variant.title }} - {{ variant.price | money }}
-                </option>
-              {% endfor %}
-            </select>
-          </div>
-        {% else %}
-          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-        {% endunless %}
+        {%- comment -%}
+          Brand size scale is always XS–XXL.
+          When Shopify has a Size option (e.g. S/M/L), those become selectable;
+          missing / sold-out sizes stay greyed out.
+          If Size variants are not set up yet, keep selling the default variant
+          so the product does not appear unavailable.
+        {%- endcomment -%}
+        {% assign size_scale = 'XS,S,M,L,XL,XXL' | split: ',' %}
+        {% assign size_option_index = blank %}
+        {% for option in product.options_with_values %}
+          {% assign option_name_down = option.name | downcase | strip %}
+          {% if option_name_down == 'size' or option_name_down == 'sizes' %}
+            {% assign size_option_index = forloop.index0 %}
+          {% endif %}
+        {% endfor %}
+        {% if size_option_index == blank and product.has_only_default_variant == false and product.options.size > 0 %}
+          {% assign first_option_name = product.options.first | downcase | strip %}
+          {% unless first_option_name == 'title' %}
+            {% assign size_option_index = 0 %}
+          {% endunless %}
+        {% endif %}
 
-        <button type="submit" class="button product-form__submit" {% unless product.available %}disabled{% endunless %}>
-          {% if product.available %}Add to cart{% else %}Sold out{% endif %}
+        {% assign current_variant = product.selected_or_first_available_variant %}
+        {% assign has_size_variants = false %}
+        {% if size_option_index != blank and product.has_only_default_variant == false %}
+          {% assign has_size_variants = true %}
+        {% endif %}
+
+        {% assign first_available_size_variant = blank %}
+        {% if has_size_variants %}
+          {% for variant in product.variants %}
+            {% if variant.available %}
+              {% assign first_available_size_variant = variant %}
+              {% break %}
+            {% endif %}
+          {% endfor %}
+          {% if first_available_size_variant != blank %}
+            {% assign current_variant = first_available_size_variant %}
+          {% endif %}
+        {% endif %}
+
+        <div
+          class="product-form__field product-form__sizes"
+          data-size-picker
+          {% if has_size_variants %}data-has-sizes="true"{% endif %}
+        >
+          <div class="product-form__size-header">
+            <span class="product-form__size-label">Size</span>
+            <span class="product-form__size-selected" data-size-selected>
+              {% if has_size_variants %}
+                {% if current_variant.available %}
+                  {{ current_variant.options[size_option_index] }}
+                {% else %}
+                  Select a size
+                {% endif %}
+              {% else %}
+                One size
+              {% endif %}
+            </span>
+          </div>
+
+          <div class="product-form__size-grid" role="listbox" aria-label="Select size">
+            {% for size in size_scale %}
+              {% assign size_down = size | downcase %}
+              {% assign matched_variant = blank %}
+              {% assign size_available = false %}
+
+              {% if has_size_variants %}
+                {% for variant in product.variants %}
+                  {% assign variant_size = variant.options[size_option_index] | strip %}
+                  {% assign variant_size_down = variant_size | downcase %}
+                  {% if variant_size_down == size_down %}
+                    {% assign matched_variant = variant %}
+                    {% if variant.available %}
+                      {% assign size_available = true %}
+                    {% endif %}
+                    {% break %}
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+
+              {% assign is_selected = false %}
+              {% if has_size_variants and matched_variant != blank and matched_variant.id == current_variant.id and size_available %}
+                {% assign is_selected = true %}
+              {% endif %}
+
+              <button
+                type="button"
+                class="product-form__size-btn{% if is_selected %} is-selected{% endif %}{% unless size_available %} is-unavailable{% endunless %}"
+                role="option"
+                aria-selected="{% if is_selected %}true{% else %}false{% endif %}"
+                data-size="{{ size | escape }}"
+                {% if matched_variant != blank %}
+                  data-variant-id="{{ matched_variant.id }}"
+                  data-variant-price="{{ matched_variant.price | money }}"
+                  data-variant-available="{% if matched_variant.available %}true{% else %}false{% endif %}"
+                {% endif %}
+                {% unless size_available %}
+                  disabled
+                  aria-disabled="true"
+                  title="{% if matched_variant != blank %}Sold out{% else %}Unavailable{% endif %}"
+                {% endunless %}
+              >
+                {{ size }}
+              </button>
+            {% endfor %}
+          </div>
+
+          {% unless has_size_variants %}
+            <p class="product-form__size-note">
+              Size selection will unlock once Size variants (XS–XXL) are added in Shopify Admin.
+            </p>
+          {% endunless %}
+        </div>
+
+        {% if has_size_variants %}
+          <input
+            type="hidden"
+            name="id"
+            value="{% if current_variant.available %}{{ current_variant.id }}{% endif %}"
+            data-variant-id-input
+          >
+        {% else %}
+          <input
+            type="hidden"
+            name="id"
+            value="{{ product.selected_or_first_available_variant.id }}"
+            data-variant-id-input
+          >
+        {% endif %}
+
+        <button
+          type="submit"
+          class="button product-form__submit"
+          data-add-to-cart
+          {% if has_size_variants %}
+            {% unless current_variant.available %}disabled{% endunless %}
+          {% else %}
+            {% unless product.available %}disabled{% endunless %}
+          {% endif %}
+        >
+          {% if has_size_variants %}
+            {% if current_variant.available %}Add to cart{% else %}Sold out{% endif %}
+          {% else %}
+            {% if product.available %}Add to cart{% else %}Sold out{% endif %}
+          {% endif %}
         </button>
       {% endform %}
     </div>
@@ -84,34 +215,80 @@
 </section>
 
 <script>
-  (function() {
+  (function () {
     var gallery = document.querySelector('[data-product-gallery="{{ section.id }}"]');
-    if (!gallery) return;
+    if (gallery) {
+      var mainImage = document.getElementById('ProductMainImage-{{ section.id }}');
+      var thumbs = gallery.querySelectorAll('.product-page__thumb');
 
-    var mainImage = document.getElementById('ProductMainImage-{{ section.id }}');
-    var thumbs = gallery.querySelectorAll('.product-page__thumb');
+      thumbs.forEach(function (thumb) {
+        thumb.addEventListener('click', function () {
+          var src = thumb.getAttribute('data-full-src');
+          var alt = thumb.getAttribute('data-alt') || '';
+          var width = thumb.getAttribute('data-width');
+          var height = thumb.getAttribute('data-height');
 
-    thumbs.forEach(function(thumb) {
-      thumb.addEventListener('click', function() {
-        var src = thumb.getAttribute('data-full-src');
-        var alt = thumb.getAttribute('data-alt') || '';
-        var width = thumb.getAttribute('data-width');
-        var height = thumb.getAttribute('data-height');
+          if (!src || !mainImage) return;
 
-        if (!src || !mainImage) return;
+          mainImage.setAttribute('src', src);
+          mainImage.setAttribute('alt', alt);
+          if (width) mainImage.setAttribute('width', width);
+          if (height) mainImage.setAttribute('height', height);
 
-        mainImage.setAttribute('src', src);
-        mainImage.setAttribute('alt', alt);
-        if (width) mainImage.setAttribute('width', width);
-        if (height) mainImage.setAttribute('height', height);
+          thumbs.forEach(function (other) {
+            other.classList.remove('is-active');
+            other.removeAttribute('aria-current');
+          });
 
-        thumbs.forEach(function(other) {
-          other.classList.remove('is-active');
-          other.removeAttribute('aria-current');
+          thumb.classList.add('is-active');
+          thumb.setAttribute('aria-current', 'true');
         });
+      });
+    }
 
-        thumb.classList.add('is-active');
-        thumb.setAttribute('aria-current', 'true');
+    var picker = document.querySelector('[data-size-picker]');
+    if (!picker || picker.getAttribute('data-has-sizes') !== 'true') return;
+
+    var buttons = picker.querySelectorAll('.product-form__size-btn');
+    var selectedLabel = picker.querySelector('[data-size-selected]');
+    var variantInput = document.querySelector('[data-variant-id-input]');
+    var priceEl = document.querySelector('[data-product-price]');
+    var submitBtn = document.querySelector('[data-add-to-cart]');
+
+    function selectSize(btn) {
+      if (!btn || btn.disabled) return;
+
+      var variantId = btn.getAttribute('data-variant-id');
+      var available = btn.getAttribute('data-variant-available') === 'true';
+      var price = btn.getAttribute('data-variant-price');
+      var size = btn.getAttribute('data-size');
+
+      buttons.forEach(function (other) {
+        other.classList.remove('is-selected');
+        other.setAttribute('aria-selected', 'false');
+      });
+
+      btn.classList.add('is-selected');
+      btn.setAttribute('aria-selected', 'true');
+
+      if (selectedLabel) selectedLabel.textContent = size || '';
+      if (variantInput) variantInput.value = available && variantId ? variantId : '';
+      if (priceEl && price) priceEl.textContent = price;
+
+      if (submitBtn) {
+        if (available && variantId) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Add to cart';
+        } else {
+          submitBtn.disabled = true;
+          submitBtn.textContent = 'Sold out';
+        }
+      }
+    }
+
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        selectSize(btn);
       });
     });
   })();
