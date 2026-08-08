@@ -2,13 +2,27 @@
   <div class="hero-media__background">
     {%- assign media_type = section.settings.media_type -%}
     {% if media_type == 'image' and section.settings.image != blank %}
-      <img
-        src="{{ section.settings.image | image_url: width: 2200 }}"
-        alt="{{ section.settings.image.alt | escape }}"
-        loading="eager"
-        width="{{ section.settings.image.width }}"
-        height="{{ section.settings.image.height }}"
-      >
+      {%- assign hero_image = section.settings.image -%}
+      <div class="hero-media__pan" data-hero-pan>
+        <img
+          class="hero-media__pan-frame"
+          src="{{ hero_image | image_url: width: 2400 }}"
+          alt="{{ hero_image.alt | escape }}"
+          loading="eager"
+          width="{{ hero_image.width }}"
+          height="{{ hero_image.height }}"
+        >
+        {%- comment -%} Duplicate frame for seamless infinite pan on mobile only. {%- endcomment -%}
+        <img
+          class="hero-media__pan-frame"
+          src="{{ hero_image | image_url: width: 2400 }}"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          width="{{ hero_image.width }}"
+          height="{{ hero_image.height }}"
+        >
+      </div>
     {% elsif media_type == 'video' and section.settings.video != blank %}
       {{
         section.settings.video
@@ -20,13 +34,26 @@
           image_size: '2000x'
       }}
     {% elsif section.settings.image != blank %}
-      <img
-        src="{{ section.settings.image | image_url: width: 2200 }}"
-        alt="{{ section.settings.image.alt | escape }}"
-        loading="eager"
-        width="{{ section.settings.image.width }}"
-        height="{{ section.settings.image.height }}"
-      >
+      {%- assign hero_image = section.settings.image -%}
+      <div class="hero-media__pan" data-hero-pan>
+        <img
+          class="hero-media__pan-frame"
+          src="{{ hero_image | image_url: width: 2400 }}"
+          alt="{{ hero_image.alt | escape }}"
+          loading="eager"
+          width="{{ hero_image.width }}"
+          height="{{ hero_image.height }}"
+        >
+        <img
+          class="hero-media__pan-frame"
+          src="{{ hero_image | image_url: width: 2400 }}"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          width="{{ hero_image.width }}"
+          height="{{ hero_image.height }}"
+        >
+      </div>
     {% elsif section.settings.video != blank %}
       {{
         section.settings.video

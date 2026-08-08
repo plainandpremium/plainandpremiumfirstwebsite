@@ -35,20 +35,30 @@
               {% assign size_option_index = 0 %}
             {% endif %}
             {% if size_option_index != nil and featured_product.has_only_default_variant == false %}
-              <p class="product-card__sizes" aria-label="Available sizes">
-                {% for size in size_scale %}
-                  {% assign size_down = size | downcase %}
-                  {% assign size_available = false %}
-                  {% for variant in featured_product.variants %}
-                    {% assign variant_size_down = variant.options[size_option_index] | strip | downcase %}
-                    {% if variant_size_down == size_down and variant.available %}
-                      {% assign size_available = true %}
-                      {% break %}
-                    {% endif %}
-                  {% endfor %}
-                  <span class="product-card__size{% unless size_available %} is-unavailable{% endunless %}">{{ size }}</span>{% unless forloop.last %} · {% endunless %}
+              {% assign available_size_labels = '' %}
+              {% for size in size_scale %}
+                {% assign size_down = size | downcase %}
+                {% assign size_available = false %}
+                {% for variant in featured_product.variants %}
+                  {% assign variant_size_down = variant.options[size_option_index] | strip | downcase %}
+                  {% if variant_size_down == size_down and variant.available %}
+                    {% assign size_available = true %}
+                    {% break %}
+                  {% endif %}
                 {% endfor %}
-              </p>
+                {% if size_available %}
+                  {% if available_size_labels == blank %}
+                    {% assign available_size_labels = size %}
+                  {% else %}
+                    {% assign available_size_labels = available_size_labels | append: ' · ' | append: size %}
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+              {% if available_size_labels != blank %}
+                <p class="product-card__sizes" aria-label="Available sizes">
+                  {{ available_size_labels }}
+                </p>
+              {% endif %}
             {% endif %}
           </div>
         {% else %}

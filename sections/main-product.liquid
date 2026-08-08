@@ -143,30 +143,26 @@
                 {% endfor %}
               {% endif %}
 
-              {% assign is_selected = false %}
-              {% if has_size_variants and matched_variant != blank and matched_variant.id == current_variant.id and size_available %}
-                {% assign is_selected = true %}
-              {% endif %}
+              {% comment %} Temporarily hide out-of-stock / missing sizes instead of greying them out. {% endcomment %}
+              {% if size_available and matched_variant != blank %}
+                {% assign is_selected = false %}
+                {% if matched_variant.id == current_variant.id %}
+                  {% assign is_selected = true %}
+                {% endif %}
 
-              <button
-                type="button"
-                class="product-form__size-btn{% if is_selected %} is-selected{% endif %}{% unless size_available %} is-unavailable{% endunless %}"
-                role="option"
-                aria-selected="{% if is_selected %}true{% else %}false{% endif %}"
-                data-size="{{ size | escape }}"
-                {% if matched_variant != blank %}
+                <button
+                  type="button"
+                  class="product-form__size-btn{% if is_selected %} is-selected{% endif %}"
+                  role="option"
+                  aria-selected="{% if is_selected %}true{% else %}false{% endif %}"
+                  data-size="{{ size | escape }}"
                   data-variant-id="{{ matched_variant.id }}"
                   data-variant-price="{{ matched_variant.price | money }}"
-                  data-variant-available="{% if matched_variant.available %}true{% else %}false{% endif %}"
-                {% endif %}
-                {% unless size_available %}
-                  disabled
-                  aria-disabled="true"
-                  title="{% if matched_variant != blank %}Sold out{% else %}Unavailable{% endif %}"
-                {% endunless %}
-              >
-                {{ size }}
-              </button>
+                  data-variant-available="true"
+                >
+                  {{ size }}
+                </button>
+              {% endif %}
             {% endfor %}
           </div>
 

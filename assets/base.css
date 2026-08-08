@@ -421,16 +421,35 @@ body.site-drawer-open {
   object-fit: cover;
 }
 
+.hero-media__pan {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-media__pan-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Desktop: only show the first frame; second is for mobile seamless loop */
+.hero-media__pan-frame:nth-child(2) {
+  display: none;
+}
+
 .hero-media__background::after {
   content: "";
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.4);
+  z-index: 1;
 }
 
 .hero-media__overlay {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   min-height: var(--hero-height);
   display: flex;
   flex-direction: column;
@@ -604,52 +623,54 @@ body.site-drawer-open {
   margin-bottom: 0.65rem;
 }
 
-.product-form__size-selected {
-  font-size: 0.88rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: #555;
+.product-form__size-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
 }
 
-.product-form__size-grid {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 0.45rem;
+.product-form__size-grid .product-form__size-btn {
+  flex: 1 1 3.5rem;
+  max-width: 5rem;
 }
 
 .product-form__size-btn {
   appearance: none;
-  border: 1px solid #1b1b1b;
+  -webkit-appearance: none;
+  border: 1.5px solid #000;
   background: #fff;
-  color: #111;
-  min-height: 2.6rem;
-  padding: 0.45rem 0.2rem;
-  font: inherit;
-  font-size: 0.82rem;
-  letter-spacing: 0.06em;
+  color: #000;
+  -webkit-text-fill-color: #000;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.35rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer;
+  opacity: 1;
 }
 
 .product-form__size-btn:hover:not(:disabled) {
-  background: #111;
+  background: #000;
   color: #fff;
+  -webkit-text-fill-color: #fff;
 }
 
 .product-form__size-btn.is-selected {
-  background: #111;
+  background: #000;
   color: #fff;
+  -webkit-text-fill-color: #fff;
+  border-color: #000;
 }
 
-.product-form__size-btn.is-unavailable,
-.product-form__size-btn:disabled {
-  border-color: #d8d8d8;
-  color: #b0b0b0;
-  background: #f5f5f5;
-  cursor: not-allowed;
-  position: relative;
-  text-decoration: line-through;
-  text-decoration-thickness: 1px;
+.product-form__size-selected {
+  font-size: 0.88rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #000;
+  font-weight: 600;
 }
 
 .product-form__size-note {
@@ -676,16 +697,8 @@ body.site-drawer-open {
   font-size: 0.78rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #777;
-}
-
-.product-card__size {
   color: #111;
-}
-
-.product-card__size.is-unavailable {
-  color: #bbb;
-  text-decoration: line-through;
+  font-weight: 600;
 }
 
 .section-header h2,
@@ -1156,13 +1169,64 @@ body.site-drawer-open {
   :root {
     --section-gap: 3.3rem;
     /* Keeps hero ~50–58% viewport; desktop slider still applies above this breakpoint */
-    --hero-mobile-vh: clamp(260px, 56vh, 68vh);
+    --hero-mobile-vh: 80vh;
   }
 
-  /* Desktop hero_height (e.g. 80vh) feels full-screen on phones; cap height here */
+  /* Taller hero on phones (~80% of viewport) */
   .hero-media,
   .hero-media__overlay {
     min-height: var(--hero-mobile-vh);
+  }
+
+  /*
+    Mobile-only: infinite horizontal pan of the wide hero image.
+    Starts at the left edge, drifts rightward across the frame,
+    then loops seamlessly using a duplicated image strip.
+  */
+  .hero-media__pan {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    inset: auto;
+    top: 0;
+    left: 0;
+    width: max-content;
+    height: 100%;
+    will-change: transform;
+    animation: hero-pan-loop 42s linear infinite;
+  }
+
+  .hero-media__background .hero-media__pan-frame,
+  .hero-media__pan-frame {
+    position: relative !important;
+    inset: auto !important;
+    display: block;
+    flex: 0 0 auto;
+    height: 100% !important;
+    width: auto !important;
+    max-width: none !important;
+    object-fit: cover;
+    object-position: left center;
+  }
+
+  .hero-media__background .hero-media__pan-frame:nth-child(2),
+  .hero-media__pan-frame:nth-child(2) {
+    display: block;
+  }
+
+  @keyframes hero-pan-loop {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-media__pan {
+      animation: none;
+    }
   }
 
   .hero-media__overlay {
@@ -1221,7 +1285,6 @@ body.site-drawer-open {
   }
 
   .product-form__size-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.5rem;
   }
 
