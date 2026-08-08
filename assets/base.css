@@ -1180,8 +1180,8 @@ body.site-drawer-open {
 
   /*
     Mobile-only: infinite horizontal pan of the wide hero image.
-    Starts at the left edge, drifts rightward across the frame,
-    then loops seamlessly using a duplicated image strip.
+    Starts partway into the image (halfway / "2 of 4"), then drifts
+    further, looping seamlessly with a duplicated image strip.
   */
   .hero-media__pan {
     display: flex;
@@ -1193,6 +1193,7 @@ body.site-drawer-open {
     width: max-content;
     height: 100%;
     will-change: transform;
+    /* -25% of the 2-frame strip = halfway into the first image */
     animation: hero-pan-loop 42s linear infinite;
   }
 
@@ -1214,18 +1215,20 @@ body.site-drawer-open {
     display: block;
   }
 
+  /* Strip is [img][img]; -25% → -75% = start at mid-image, advance one full frame */
   @keyframes hero-pan-loop {
     from {
-      transform: translate3d(0, 0, 0);
+      transform: translate3d(-25%, 0, 0);
     }
     to {
-      transform: translate3d(-50%, 0, 0);
+      transform: translate3d(-75%, 0, 0);
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
     .hero-media__pan {
       animation: none;
+      transform: translate3d(-25%, 0, 0);
     }
   }
 
