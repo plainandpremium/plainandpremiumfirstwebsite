@@ -749,7 +749,7 @@ body.site-drawer-open {
 }
 
 .brand-story {
-  padding: var(--section-gap) 0;
+  padding: calc(var(--section-gap) * 0.5) 0;
 }
 
 .brand-story__inner p {
