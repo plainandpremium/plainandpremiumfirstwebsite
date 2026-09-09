@@ -5,6 +5,13 @@
       {
         "type": "paragraph",
         "content": "plain and premium: clean black and white storefront."
+      },
+      {
+        "type": "text",
+        "id": "whatsapp_number",
+        "label": "WhatsApp support number",
+        "default": "+91 9928109868",
+        "info": "Shown in the footer and on the floating WhatsApp button."
       }
     ]
   }

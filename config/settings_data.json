@@ -9,6 +9,7 @@
  */
 {
   "current": {
+    "whatsapp_number": "+91 9928109868",
     "content_for_index": [],
     "blocks": {
       "3557650678667880288": {
@@ -23,7 +24,8 @@
         "settings": {
           "brand_text": "Look classy",
           "tagline": "money ≠ class.",
-          "contact_email": ""
+          "contact_email": "",
+          "support_message": "We are legit. Have queries? Need support? Talk straight to us."
         }
       }
     }

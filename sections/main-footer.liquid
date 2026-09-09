@@ -42,14 +42,28 @@
       </ul>
     </div>
 
-    <div class="site-footer__column">
+    <div class="site-footer__column site-footer__column--contact">
       <h2 class="site-footer__heading">Contact</h2>
-      <ul class="site-footer__links">
-        {% if section.settings.contact_email != blank %}
-          <li><a href="mailto:{{ section.settings.contact_email }}">{{ section.settings.contact_email }}</a></li>
-        {% elsif shop.email != blank %}
-          <li><a href="mailto:{{ shop.email }}">{{ shop.email }}</a></li>
+
+      <div class="site-footer__contact-block">
+        {% if section.settings.support_message != blank %}
+          <p class="site-footer__support-message">{{ section.settings.support_message }}</p>
         {% endif %}
+
+        {% render 'whatsapp-support', style: 'footer-link' %}
+
+        {% if section.settings.contact_email != blank %}
+          <p class="site-footer__contact-line">
+            <a href="mailto:{{ section.settings.contact_email }}">{{ section.settings.contact_email }}</a>
+          </p>
+        {% elsif shop.email != blank %}
+          <p class="site-footer__contact-line">
+            <a href="mailto:{{ shop.email }}">{{ shop.email }}</a>
+          </p>
+        {% endif %}
+      </div>
+
+      <ul class="site-footer__links site-footer__links--policies">
         {% if shop.privacy_policy %}
           <li><a href="{{ shop.privacy_policy.url }}">Privacy policy</a></li>
         {% endif %}
@@ -89,6 +103,12 @@
       "id": "contact_email",
       "label": "Contact email",
       "info": "Leave blank to use your store email."
+    },
+    {
+      "type": "textarea",
+      "id": "support_message",
+      "label": "Support message",
+      "default": "We are legit. Have queries? Need support? Talk straight to us."
     }
   ],
   "presets": [
