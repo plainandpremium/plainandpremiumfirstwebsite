@@ -1,0 +1,5 @@
+# Shopify CLI theme config — plain and premium
+# https://shopify.dev/docs/storefronts/themes/tools/cli
+
+[environments.default]
+store = "plainandpremium.myshopify.com"

@@ -596,6 +596,21 @@ body.site-drawer-open {
   font-size: 1.15rem;
 }
 
+.product-page__highlights {
+  margin: 0 0 1.5rem;
+  padding-left: 1.15rem;
+  line-height: 1.65;
+  color: #333;
+}
+
+.product-page__highlights li {
+  margin-bottom: 0.45rem;
+}
+
+.product-page__highlights li:last-child {
+  margin-bottom: 0;
+}
+
 .product-page__description {
   margin-bottom: 2rem;
   line-height: 1.7;
@@ -1121,6 +1136,13 @@ body.site-drawer-open {
   justify-content: space-between;
   margin: 0 0 1rem;
   font-size: 1rem;
+}
+
+.cart-page__shipping-note {
+  margin: 0 0 1rem;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: #444;
 }
 
 .cart-page__checkout {

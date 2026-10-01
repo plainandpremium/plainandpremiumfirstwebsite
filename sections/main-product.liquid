@@ -55,6 +55,12 @@
         {{ product.selected_or_first_available_variant.price | money }}
       </p>
 
+      <ul class="product-page__highlights">
+        <li>Perfectly oversized fit, not too much.</li>
+        <li>No bullshit pricing. This is a good-quality cloth.</li>
+        <li>Maximum comfort.</li>
+      </ul>
+
       {% if section.settings.show_description and product.description != blank %}
         <div class="product-page__description rte">
           {{ product.description }}
