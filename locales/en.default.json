@@ -11,7 +11,8 @@
   "shopify": {
     "checkout": {
       "order_summary": {
-        "shipping_label": "₹50 shipping on orders below ₹1,000."
+        "shipping_label": "Shipping",
+        "vat_label_html": "Including {{ amount }} in taxes<br>₹50 shipping on orders below ₹1,000."
       }
     }
   }
