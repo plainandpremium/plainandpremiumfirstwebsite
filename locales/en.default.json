@@ -12,7 +12,7 @@
     "checkout": {
       "order_summary": {
         "shipping_label": "Shipping",
-        "vat_label_html": "Including {{ amount }} in taxes<br>₹50 shipping on orders below ₹1,000."
+        "vat_label_html": "Including {{ amount }} in taxes<br>₹50 shipping below ₹1,000."
       }
     }
   }
