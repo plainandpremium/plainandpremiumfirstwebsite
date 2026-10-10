@@ -1,5 +1,6 @@
 <aside class="instagram-banner" aria-label="Instagram offer">
-  <div class="instagram-banner__track">
+  <a class="instagram-banner__link" href="https://www.instagram.com/plainandpremium/" target="_blank" rel="noopener noreferrer" aria-label="Follow plainandpremium on Instagram and DM to get flat ₹100 off (opens in a new tab)">
+  <div class="instagram-banner__track" aria-hidden="true">
     {% for group in (1..2) %}
       <div class="instagram-banner__group"{% if group == 2 %} aria-hidden="true"{% endif %}>
         {% for repeat in (1..3) %}
@@ -8,5 +9,6 @@
       </div>
     {% endfor %}
   </div>
+  </a>
   <button class="instagram-banner__pause" type="button" aria-label="Pause scrolling offer" aria-pressed="false" onclick="var paused = this.parentElement.classList.toggle('is-paused'); this.setAttribute('aria-pressed', String(paused)); this.setAttribute('aria-label', paused ? 'Resume scrolling offer' : 'Pause scrolling offer'); this.textContent = paused ? '▶' : 'Ⅱ';">Ⅱ</button>
 </aside>

@@ -69,6 +69,9 @@ a {
   line-height: 1.5;
 }
 
+.instagram-banner__link { display: block; }
+.instagram-banner__link:focus-visible { outline: 1px solid #fff; outline-offset: -3px; }
+
 .instagram-banner__track {
   display: flex;
   width: max-content;
