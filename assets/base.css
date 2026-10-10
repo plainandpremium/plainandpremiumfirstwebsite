@@ -57,6 +57,64 @@ a {
   gap: 1rem;
 }
 
+.instagram-banner {
+  position: relative;
+  flex: 0 0 auto;
+  overflow: hidden;
+  background: #111;
+  color: #fff;
+  padding: 11px 0;
+  font-size: 12px;
+  letter-spacing: 0.055em;
+  line-height: 1.5;
+}
+
+.instagram-banner__track {
+  display: flex;
+  width: max-content;
+  animation: instagram-offer-scroll 45s linear infinite;
+}
+
+.instagram-banner__group {
+  display: flex;
+  flex-shrink: 0;
+  min-width: 100vw;
+  justify-content: space-around;
+}
+
+.instagram-banner__message {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.instagram-banner__dot { margin: 0 36px; font-size: 15px; }
+.instagram-banner:hover .instagram-banner__track,
+.instagram-banner:focus-within .instagram-banner__track,
+.instagram-banner.is-paused .instagram-banner__track { animation-play-state: paused; }
+.instagram-banner__pause {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 36px;
+  border: 0;
+  background: #111;
+  color: #fff;
+  cursor: pointer;
+}
+.instagram-banner__pause:focus-visible { outline: 1px solid #fff; outline-offset: -4px; }
+@keyframes instagram-offer-scroll { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) {
+  .instagram-banner__track { animation: none; width: auto; }
+  .instagram-banner__group { width: 100%; justify-content: center; }
+  .instagram-banner__group:nth-child(2),
+  .instagram-banner__message:not(:first-child),
+  .instagram-banner__dot,
+  .instagram-banner__pause { display: none; }
+  .instagram-banner__message { white-space: normal; text-align: center; padding: 0 16px; }
+}
+
 .site-title {
   font-size: 1rem;
   text-transform: lowercase;
