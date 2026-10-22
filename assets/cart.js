@@ -69,7 +69,7 @@
   }
 
   function setCartQtyDisabled(disabled) {
-    document.querySelectorAll('.js-cart-qty, .js-cart-qty-btn').forEach(function (el) {
+    document.querySelectorAll('.js-cart-qty, .js-cart-qty-btn, #CartCheckoutForm [name="checkout"]').forEach(function (el) {
       el.disabled = disabled;
     });
   }
@@ -111,8 +111,10 @@
 
   document.querySelectorAll('.js-product-form').forEach(function (form) {
     form.addEventListener('submit', function (e) {
+      // Let accelerated checkout handle its own purchase action.
+      if (e.submitter && !e.submitter.matches('[data-add-to-cart]')) return;
       e.preventDefault();
-      var submitBtn = form.querySelector('[type="submit"]');
+      var submitBtn = form.querySelector('[data-add-to-cart]');
       var variantInput = form.querySelector('[name="id"]');
       if (!variantInput || !submitBtn || submitBtn.disabled) return;
 

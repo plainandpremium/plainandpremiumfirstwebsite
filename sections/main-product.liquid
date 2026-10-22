@@ -195,22 +195,27 @@
           >
         {% endif %}
 
-        <button
-          type="submit"
-          class="button product-form__submit"
-          data-add-to-cart
-          {% if has_size_variants %}
-            {% unless current_variant.available %}disabled{% endunless %}
-          {% else %}
-            {% unless product.available %}disabled{% endunless %}
+        <div class="product-form__actions{% if section.settings.show_buy_now %} product-form__actions--express{% endif %}">
+          <button
+            type="submit"
+            class="button product-form__submit"
+            data-add-to-cart
+            {% if has_size_variants %}
+              {% unless current_variant.available %}disabled{% endunless %}
+            {% else %}
+              {% unless product.available %}disabled{% endunless %}
+            {% endif %}
+          >
+            {% if has_size_variants %}
+              {% if current_variant.available %}Add to cart{% else %}Sold out{% endif %}
+            {% else %}
+              {% if product.available %}Add to cart{% else %}Sold out{% endif %}
+            {% endif %}
+          </button>
+          {% if section.settings.show_buy_now and product.available %}
+            {{ form | payment_button }}
           {% endif %}
-        >
-          {% if has_size_variants %}
-            {% if current_variant.available %}Add to cart{% else %}Sold out{% endif %}
-          {% else %}
-            {% if product.available %}Add to cart{% else %}Sold out{% endif %}
-          {% endif %}
-        </button>
+        </div>
       {% endform %}
     </div>
   </div>
@@ -274,7 +279,10 @@
       btn.setAttribute('aria-selected', 'true');
 
       if (selectedLabel) selectedLabel.textContent = size || '';
-      if (variantInput) variantInput.value = available && variantId ? variantId : '';
+      if (variantInput) {
+        variantInput.value = available && variantId ? variantId : '';
+        variantInput.dispatchEvent(new Event('change', { bubbles: true }));
+      }
       if (priceEl && price) priceEl.textContent = price;
 
       if (submitBtn) {
@@ -305,6 +313,12 @@
       "id": "eyebrow",
       "label": "Small heading",
       "default": "Plain and Premium"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_buy_now",
+      "label": "Show Buy Now button",
+      "default": true
     },
     {
       "type": "checkbox",

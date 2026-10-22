@@ -109,7 +109,9 @@
           <p class="cart-page__shipping-note">
             ₹50 shipping on orders below ₹1,000.
           </p>
-          <a href="/checkout" class="button cart-page__checkout">Checkout</a>
+          <form action="{{ routes.cart_url }}" method="post" id="CartCheckoutForm">
+            <button type="submit" name="checkout" class="button cart-page__checkout">Checkout</button>
+          </form>
         </div>
       {% else %}
         <p class="customer-account__empty">Your cart is empty.</p>
