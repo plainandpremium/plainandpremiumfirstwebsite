@@ -677,6 +677,132 @@ body.site-drawer-open {
   line-height: 1.7;
 }
 
+.product-form__size-guide-link {
+  justify-self: start;
+  padding: 0.35rem 0;
+  min-height: 44px;
+  border: 0;
+  background: transparent;
+  color: #111;
+  font: inherit;
+  font-size: 0.85rem;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.product-information {
+  margin-top: 1.75rem;
+  border-top: 1px solid #d6d6d6;
+}
+
+.product-information__item {
+  border-bottom: 1px solid #d6d6d6;
+  scroll-margin-top: 7rem;
+}
+
+.product-information__item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 0;
+  min-height: 48px;
+  color: #111;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  list-style: none;
+  cursor: pointer;
+}
+
+.product-information__item summary::-webkit-details-marker {
+  display: none;
+}
+
+.product-information__toggle::before {
+  content: '+';
+  font-size: 1.2rem;
+  font-weight: 400;
+}
+
+.product-information__item[open] .product-information__toggle::before {
+  content: '−';
+}
+
+.product-information__content {
+  padding: 0 0 1.2rem;
+  color: #333;
+  font-size: 0.875rem;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.product-information__content p {
+  margin: 0 0 0.85rem;
+}
+
+.product-information__content ul {
+  margin: 0 0 1rem;
+  padding-left: 1.1rem;
+}
+
+.product-information__content li + li {
+  margin-top: 0.4rem;
+}
+
+.product-information__content a {
+  color: #111;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.product-information__content .product-information__muted {
+  color: #5c5c5c;
+  font-size: 0.8rem;
+}
+
+.product-information__contact {
+  display: inline-block;
+  padding: 0.6rem 0;
+  min-height: 44px;
+}
+
+.product-size-guide {
+  margin: 1rem 0;
+}
+
+.product-size-guide table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.product-size-guide caption {
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+
+.product-size-guide th,
+.product-size-guide td {
+  padding: 0.65rem 0.35rem;
+  border-bottom: 1px solid #e5e5e5;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.product-size-guide thead {
+  background: #f5f5f5;
+}
+
+.product-form__size-guide-link:focus-visible,
+.product-information summary:focus-visible,
+.product-information a:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 3px;
+}
+
 .product-form__field {
   display: grid;
   gap: 0.45rem;

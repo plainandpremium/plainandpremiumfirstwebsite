@@ -1,0 +1,69 @@
+{%- liquid
+  assign exchange_phone = settings.whatsapp_number | default: '+91 9928109868'
+  assign exchange_digits = exchange_phone | remove: '+' | remove: ' ' | remove: '-'
+  assign exchange_message = 'Hi, I would like to request an exchange for my Plain and Premium order.' | url_encode
+-%}
+
+<div class="product-information" aria-label="Product information">
+  <details class="product-information__item" id="ProductSizeGuide-{{ section.id }}">
+    <summary>Size &amp; fit <span class="product-information__toggle" aria-hidden="true"></span></summary>
+    <div class="product-information__content">
+      <p>Perfectly oversized and cropped. Not too oversized. Not too long.</p>
+      <p class="product-information__muted">Measure around the fullest part of your chest, keeping the tape level. These are <strong>body chest measurements</strong>, not T-shirt measurements.</p>
+      {% comment %}Body-measurement reference requested by the merchant: AJIO H&M product 700450330_black, checked 1 November 2026. Do not describe these as garment dimensions.{% endcomment %}
+      <div class="product-size-guide">
+        <table>
+          <caption>Body chest size guide</caption>
+          <thead><tr><th scope="col">Size</th><th scope="col">Chest (in)</th><th scope="col">Chest (cm)</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">XS</th><td>30.75–33.25</td><td>78.1–84.46</td></tr>
+            <tr><th scope="row">S</th><td>33.75–35.25</td><td>85.73–89.54</td></tr>
+            <tr><th scope="row">M</th><td>37–38.25</td><td>93.98–97.16</td></tr>
+            <tr><th scope="row">L</th><td>40.25–41.75</td><td>102.24–106.05</td></tr>
+            <tr><th scope="row">XL</th><td>43.25–44.75</td><td>109.86–113.67</td></tr>
+            <tr><th scope="row">XXL</th><td>46.25–48</td><td>117.48–121.92</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="product-information__muted">Between sizes or unsure? <a href="https://wa.me/{{ exchange_digits }}" target="_blank" rel="noopener noreferrer">Ask us on WhatsApp</a> before ordering. Available sizes are shown above.</p>
+    </div>
+  </details>
+
+  <details class="product-information__item">
+    <summary>Shipping <span class="product-information__toggle" aria-hidden="true"></span></summary>
+    <div class="product-information__content">
+      <p>₹50 shipping on orders below ₹1,000. Free shipping on orders of ₹1,000 or more.</p>
+      <p>Delivery options and the final total are shown at checkout. For delivery queries, <a href="https://wa.me/{{ exchange_digits }}" target="_blank" rel="noopener noreferrer">contact us on WhatsApp</a>.</p>
+    </div>
+  </details>
+
+  <details class="product-information__item" id="ProductExchanges-{{ section.id }}">
+    <summary>Exchanges <span class="product-information__toggle" aria-hidden="true"></span></summary>
+    <div class="product-information__content">
+      <p><strong>Exchange within 7 days of delivery. ₹50 exchange shipping.</strong></p>
+      <p>We offer exchanges only for size or preference changes, with no change-of-mind returns or refunds.</p>
+      <ul>
+        <li>Items must be unworn, unwashed and in their original condition, with tags and packaging intact.</li>
+        <li>Contact us within 7 days with your order number, the item and the size you need. Exchanges are subject to stock availability.</li>
+        <li>Wait for our confirmation and shipping instructions before sending anything back. We will inspect the item before arranging your exchange.</li>
+      </ul>
+      <p>Received a damaged, defective or incorrect item? Contact us promptly with your order number and photos so we can resolve it. Your statutory rights remain unaffected.</p>
+      <a class="product-information__contact" href="https://wa.me/{{ exchange_digits }}?text={{ exchange_message }}" target="_blank" rel="noopener noreferrer">Request an exchange · {{ exchange_phone }}</a>
+      {% if shop.refund_policy != blank %}
+        <p><a href="{{ shop.refund_policy.url }}">Read the full exchange policy</a></p>
+      {% endif %}
+    </div>
+  </details>
+
+  <details class="product-information__item">
+    <summary>Care guide <span class="product-information__toggle" aria-hidden="true"></span></summary>
+    <div class="product-information__content">
+      <ul>
+        <li>Wash inside out in cold water with similar colours.</li>
+        <li>Use a mild detergent. Avoid bleach.</li>
+        <li>Dry in the shade and iron on a low setting.</li>
+        <li>Always follow the care label on your T-shirt.</li>
+      </ul>
+    </div>
+  </details>
+</div>

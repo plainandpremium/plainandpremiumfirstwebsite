@@ -172,6 +172,8 @@
             {% endfor %}
           </div>
 
+          <button type="button" class="product-form__size-guide-link" data-open-size-guide aria-controls="ProductSizeGuide-{{ section.id }}">Size guide</button>
+
           {% unless has_size_variants %}
             <p class="product-form__size-note">
               Size selection will unlock once Size variants (XS–XXL) are added in Shopify Admin.
@@ -217,12 +219,24 @@
           {% endif %}
         </div>
       {% endform %}
+
+      {% render 'product-information', section: section %}
     </div>
   </div>
 </section>
 
 <script>
   (function () {
+    var sizeGuideLink = document.querySelector('[aria-controls="ProductSizeGuide-{{ section.id }}"]');
+    var sizeGuide = document.getElementById('ProductSizeGuide-{{ section.id }}');
+    if (sizeGuideLink && sizeGuide) {
+      sizeGuideLink.addEventListener('click', function () {
+        sizeGuide.open = true;
+        sizeGuide.querySelector('summary').focus();
+        sizeGuide.scrollIntoView({ block: 'start' });
+      });
+    }
+
     var gallery = document.querySelector('[data-product-gallery="{{ section.id }}"]');
     if (gallery) {
       var mainImage = document.getElementById('ProductMainImage-{{ section.id }}');
