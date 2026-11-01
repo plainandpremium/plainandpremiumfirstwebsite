@@ -91,6 +91,7 @@ a {
   white-space: nowrap;
 }
 
+.instagram-banner__icon { flex: 0 0 16px; margin-right: 10px; }
 .instagram-banner__dot { margin: 0 36px; font-size: 15px; }
 .instagram-banner:hover .instagram-banner__track,
 .instagram-banner:focus-within .instagram-banner__track,
