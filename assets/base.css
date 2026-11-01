@@ -89,10 +89,10 @@ a {
   display: flex;
   align-items: center;
   white-space: nowrap;
+  padding-inline-end: 72px;
 }
 
 .instagram-banner__icon { flex: 0 0 16px; margin-right: 10px; }
-.instagram-banner__dot { margin: 0 36px; font-size: 15px; }
 .instagram-banner:hover .instagram-banner__track,
 .instagram-banner:focus-within .instagram-banner__track,
 .instagram-banner.is-paused .instagram-banner__track { animation-play-state: paused; }
@@ -114,7 +114,6 @@ a {
   .instagram-banner__group { width: 100%; justify-content: center; }
   .instagram-banner__group:nth-child(2),
   .instagram-banner__message:not(:first-child),
-  .instagram-banner__dot,
   .instagram-banner__pause { display: none; }
   .instagram-banner__message { white-space: normal; text-align: center; padding: 0 16px; }
 }
