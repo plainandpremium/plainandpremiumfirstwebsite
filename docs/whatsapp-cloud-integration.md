@@ -21,3 +21,19 @@ The service source lives in the Site's own private source repository, separate f
 PC checkout: `.cloud-work/whatsapp-confirmations` (ignored in this theme repository). Runtime credentials belong in Sites secret environment variables, never GitHub. There is no dependency on this PC staying online.
 
 Remaining before live cutover: confirm actual partial-COD webhook fields (`financial_status`, `total_price`, `current_total_price`, `total_outstanding`, `razorpay_partial_cod` tag and contact phone). Synthetic examples prove delivery and formatting, not real Razorpay order mapping. Obtain the user's go-ahead to switch customer sending, then disable and save native `orders/create (whatsapp)` before enabling the cloud service with a new-order activation timestamp. Never run two live confirmation senders for the same orders or backfill historical orders automatically.
+
+## Reliability check — 17 November, 16:35 IST
+
+Hosting is managed ChatGPT Sites, executing in Cloudflare Workers with persistent D1 storage. It has no dependency on either personal computer, an open chat, or a browser login session. The platform reported active/public, version 3; runtime revision 4 remained `SEND_MODE=test`. The source matched the published commit. Health returned 200, anonymous controls 403, unsigned webhook 401, and removed temporary test access 403. Health checks only prove the handler responds; they do not check the full Shopify-to-WhatsApp delivery path or establish an uptime guarantee.
+
+This version is **not yet suitable as an unattended sole customer-confirmation sender**. A local fault-injection check using the deployed source and an isolated in-memory database (no external messages) confirmed:
+
+- Fast2SMS HTTP 429: first call becomes `failed` and returns Shopify HTTP 200; a repeated event becomes `duplicate`, with no recovery send.
+- Provider timeout: first call becomes `uncertain` and returns HTTP 200; repeat is suppressed. This avoids duplicate messages but can leave a missed confirmation unresolved.
+- A record left in `sending` by an interrupted process is not reclaimed automatically.
+
+There is no durable outbound message queue, automated provider-delivery reconciliation, periodic Shopify order reconciliation, unattended failure alert or balance/hosting-usage monitor. D1 records provider acceptance, not final WhatsApp delivery. No sustained-availability SLA or account-specific hosting capacity guarantee was verified. These are gaps in the current implementation, not evidence that the Cloudflare hosting itself is broken.
+
+Before live use, add durable recovery with safe retries, resolve ambiguous sends against provider status, alert on stuck/failed messages and low credit, and verify the actual Razorpay partial-COD payload. Preserve the native simple sender until a coordinated cutover. Do not blindly retry uncertain sends or run both senders live.
+
+Official references checked: [Cloudflare runtime](https://developers.cloudflare.com/workers/reference/how-workers-works/), [Shopify delivery/retry and queue guidance](https://shopify.dev/docs/apps/build/webhooks/verify-deliveries), [Sites hosting and pricing](https://learn.chatgpt.com/docs/sites). Sites documentation currently says hosting is free through 31 December 2026, then traffic/storage above the plan's shared monthly allowance is chargeable from 1 January 2027. The user's exact allowance/available credits were not inspected; do not assume unlimited free hosting.
