@@ -1,5 +1,7 @@
 # WhatsApp cloud integration — 17 November 2026
 
+**Current user decision:** keep the original Fast2SMS Shopify app. Its saved `Order placed` automation was verified Active / WhatsApp with template `44524` and variables `{name}`, `{order_id}`, `{amount}`. The cloud service remains in test mode and must not be activated or developed further unless the user reopens that work. The connected cloud webhooks remain configured for observation only; they do not send customer confirmations.
+
 The working Fast2SMS Shopify app still sends the simple order confirmation using template `44524`. It has **not** been disabled or replaced.
 
 A separate cloud service has been built for payment-aware template `44528`, `pnp_order_confirmation_payment`. The service calculates the actual payment and outstanding balance from Shopify, rather than assuming every advance is ₹99.
