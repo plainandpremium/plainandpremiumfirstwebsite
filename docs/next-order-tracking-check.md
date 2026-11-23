@@ -7,6 +7,7 @@ When the user next mentions or asks about a new order, proactively perform this 
 ## Checks
 
 - Identify the Shopify order, creation time, payment method, final order total, discounts, shipping, currency, paid amount and outstanding amount. Check for an accidental duplicate order as well as duplicate tracking.
+- For orders placed from 23 November 2026 onward, confirm customer shipping is zero for India, including discounted and partial-COD orders. The separate exchange fee is unchanged.
 - Confirm the corresponding Purchase reaches the store's existing Meta dataset after the Razorpay Pixel + CAPI change. Obtain the dataset ID from the private project handoff or connected account.
 - Verify it counts as ONE purchase after deduplication, not separate purchases from Shopify, Razorpay, browser Pixel and server CAPI. Compare available event IDs, timestamps, sources and deduplication diagnostics. Raw received-event totals alone do not establish how many purchases were counted.
 - Check the Purchase value against the final order total and currency INR. For partial COD, distinguish the full order value from the Rs 99 advance and remaining balance; verify later balance collection does not count as another purchase.

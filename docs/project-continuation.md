@@ -27,7 +27,7 @@ Prepared 23 November 2026 for continued work in Codex Cloud.
 
 - Plain black and white T-shirts; sizes S, M and L. Fit wording: perfectly oversized and cropped; not too oversized, not too long.
 - Keep the minimal site design and prioritize mobile users arriving from Instagram.
-- Shipping: Rs 50 below Rs 1,000; free at Rs 1,000 or above. Keep the shipping note concise.
+- Shipping: free on all orders in India, with no minimum spend (requested 23 November 2026). This applies to prepaid and partial-COD orders. Shopify rates and Razorpay Magic Shipping have separate configuration; keep both aligned with the storefront copy. Courier charges paid by the merchant are separate from customer delivery fees.
 - Exchanges: requests within seven days; Rs 50 exchange shipping. Contact via the store's listed support number. Preserve the published conditions and damaged/incorrect-item provisions.
 - Instagram offer: follow and DM for flat Rs 100 off. Banner below the header, clickable to the Instagram profile, with Instagram icon; no star decoration.
 - Discount codes are created and validated in Shopify, not just in theme JavaScript. The offer uses individual one-use codes given manually through Instagram. Never publish the unused codes in this repository.
