@@ -12,9 +12,7 @@
 }
 
 html {
-  /* Checkout manages scroll position while locking/unlocking the page.
-     A global animation makes those position changes visibly drift. */
-  scroll-behavior: auto;
+  scroll-behavior: smooth;
 }
 
 html,

@@ -2,6 +2,17 @@
 
 Prepared 23 November 2026 for continued work in Codex Cloud.
 
+## Current rollback test (24 November 2026)
+
+- The merchant still reported the iPhone Instagram checkout jump after the position-lock change, and requested the website version from around 14-15 November for comparison.
+- Historical baseline: `e939365` (11 November), the latest website-code commit before those dates. The next website-code change was on 23 November. This is a saved source snapshot, not proof of every remote setting as it stood on 15 November.
+- Restored the earlier stylesheet, layout, product-page behavior and size-guide content; removed the new checkout position-lock script and provider preloads. Retained only the later free-shipping copy at the merchant's explicit request. Shopify and Razorpay shipping settings remain free; no payment/account/tracking settings are being rolled back.
+- Current live remote theme configuration and homepage content are preserved. Razorpay's remotely hosted SDK is still served by Razorpay and cannot be rolled back from this repository.
+- Return point: Git commit `2c3a41b`, plus the complete Shopify theme **Backup - 24 Nov before rollback** (`168932048999`). Preserve that backup. A future switch back should compare current live edits first, then restore the relevant source and deploy explicitly.
+- The garment lengths remain S 26 in / 66.04 cm, M 27 in / 68.58 cm and L 28 in / 71.12 cm. Their display table is temporarily absent because the merchant requested the historical version; preserve these measurements for restoration.
+- The historical comparison does not establish that the iPhone issue is fixed. Await the merchant's test inside Instagram before deciding whether to keep this version or restore the return point.
+- Deployed to the same live theme (`139945705575`) on 24 November, and read back the full theme to verify the candidate matches. Theme Check returned zero errors and 42 existing warnings. The old checkout integration opens and closes successfully; free shipping, coupon entry and Rs 99 partial COD remain available. No payment was completed.
+
 ## Source and deployment
 
 - Repository: https://github.com/plainandpremium/plainandpremiumfirstwebsite
@@ -18,7 +29,6 @@ Prepared 23 November 2026 for continued work in Codex Cloud.
 - `sections/main-product.liquid`, `snippets/product-information.liquid`: product page, size guide, shipping, exchanges and care information.
 - `sections/main-cart.liquid`, `assets/cart.js`: cart interface and actions.
 - `snippets/razorpay-magic-checkout.liquid`: Razorpay Magic Checkout loader and configuration from Shopify metafields. Preserve the supported integration; do not invent replacement credentials or hard-code secrets.
-- `assets/checkout-scroll.js`: preserves the mobile storefront position while the official Razorpay overlay loads, opens and closes.
 - `assets/base.css`: shared styling.
 - `config/settings_data.json`: theme settings and app embeds; inspect actual live configuration before replacing it.
 - `docs/next-order-tracking-check.md`: pending next-order tracking verification.
