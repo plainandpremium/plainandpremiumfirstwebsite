@@ -26,6 +26,7 @@ Prepared 23 November 2026 for continued work in Codex Cloud.
 ## Established storefront requirements
 
 - Plain black and white T-shirts; sizes S, M and L. Fit wording: perfectly oversized and cropped; not too oversized, not too long.
+- Garment lengths for both colours, supplied by the merchant on 24 November 2026: S 26 in / 66.04 cm, M 27 in / 68.58 cm, L 28 in / 71.12 cm. Display both units in the size guide, separately from the existing body-chest reference measurements.
 - Keep the minimal site design and prioritize mobile users arriving from Instagram.
 - Shipping: free on all orders in India, with no minimum spend (requested 23 November 2026). This applies to prepaid and partial-COD orders. Shopify rates and Razorpay Magic Shipping have separate configuration; keep both aligned with the storefront copy. Courier charges paid by the merchant are separate from customer delivery fees.
 - Exchanges: requests within seven days; Rs 50 exchange shipping. Contact via the store's listed support number. Preserve the published conditions and damaged/incorrect-item provisions.
