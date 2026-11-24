@@ -17,6 +17,20 @@
         &ndash; {{ shop.name }}
       {%- endunless -%}
     </title>
+    {% if request.page_type == 'product' or request.page_type == 'cart' %}
+      {%- comment -%}
+        Warm checkout connections and download the existing loader early.
+        The official integration below still owns initialization and checkout.
+        These provider-owned URLs cannot use Shopify's asset_url/preload_tag.
+      {%- endcomment -%}
+      {% # theme-check-disable RemoteAsset, AssetPreload %}
+      <link rel="preconnect" href="https://magic-plugins.razorpay.com" crossorigin>
+      <link rel="preconnect" href="https://checkout.razorpay.com">
+      <link rel="preconnect" href="https://api.razorpay.com" crossorigin>
+      <link rel="preload" href="https://magic-plugins.razorpay.com/shopify/magic-shopify.js" as="script" crossorigin="anonymous">
+      <link rel="preload" href="https://checkout.razorpay.com/v1/magic-checkout.js" as="script">
+      {% # theme-check-enable RemoteAsset, AssetPreload %}
+    {% endif %}
     {{ content_for_header }}
 
     {%- comment -%}

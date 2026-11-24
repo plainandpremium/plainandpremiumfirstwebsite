@@ -232,8 +232,11 @@
     if (sizeGuideLink && sizeGuide) {
       sizeGuideLink.addEventListener('click', function () {
         sizeGuide.open = true;
-        sizeGuide.querySelector('summary').focus();
-        sizeGuide.scrollIntoView({ block: 'start' });
+        sizeGuide.querySelector('summary').focus({ preventScroll: true });
+        sizeGuide.scrollIntoView({
+          block: 'start',
+          behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
+        });
       });
     }
 
