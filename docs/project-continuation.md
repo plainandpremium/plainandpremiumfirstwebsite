@@ -20,6 +20,8 @@ Prepared 23 November 2026 for continued work in Codex Cloud.
 - `snippets/razorpay-magic-checkout.liquid`: Razorpay Magic Checkout loader and configuration from Shopify metafields. Preserve the supported integration; do not invent replacement credentials or hard-code secrets.
 - `assets/base.css`: shared styling.
 - `config/settings_data.json`: theme settings and app embeds; inspect actual live configuration before replacing it.
+- `docs/next-order-tracking-check.md`: pending next-order tracking verification.
+- `docs/whatsapp-cloud-integration.md`: messaging implementation history and the decision to keep the native Fast2SMS app.
 
 ## Checkout performance maintenance (24 November 2026)
 
@@ -28,8 +30,6 @@ Prepared 23 November 2026 for continued work in Codex Cloud.
 - Tested both Buy now and cart checkout in a narrow desktop Chrome viewport; free shipping, selected size, payment options and the Rs 99 / Rs 600 partial-COD split remained available. No payment was completed. A real iPhone/Instagram in-app-browser performance check is still outstanding.
 - Checkout readiness varied between roughly two and five seconds in individual local checks. These are not controlled speed benchmarks and do not establish a server-side speed improvement. Any remaining payment-frame latency requires further measurement; do not describe it as eliminated.
 - The shipping-fee source commit changed copy, not payment scripts. Only `assets/base.css`, `layout/theme.liquid` and `sections/main-product.liquid` were deployed for this performance change. Preserve live app settings.
-- `docs/next-order-tracking-check.md`: pending next-order tracking verification.
-- `docs/whatsapp-cloud-integration.md`: messaging implementation history and the decision to keep the native Fast2SMS app.
 
 ## Established storefront requirements
 
